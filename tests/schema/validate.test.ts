@@ -45,6 +45,39 @@ test("additional properties are rejected", async () => {
   assert.equal(validator(resource), false);
 });
 
+test("registry ZIP metadata remains strict while staged carries nulls", async () => {
+  const validators = await createSchemaValidators(rootDir);
+  const version = JSON.parse((await readFile(path.join(rootDir, "examples/resource-version.json"))).toString()) as Record<string, any>;
+  version.packaging = { mode: "registry-zip", packagedAt: "2026-08-19T00:00:00Z", artifactFileName: "fixture-1.0.0.zip", artifactSha256: "0".repeat(64), payloadSha256: "1".repeat(64), sizeBytes: 1, githubReleaseTag: "resource/fixture/1.0.0" };
+  version.packaging.artifactSha256 = null;
+  assert.equal(validators.get("resource-version")!(version), false);
+  version.packaging = { mode: "staged", packagedAt: "2026-08-19T00:00:00Z", artifactFileName: null, artifactSha256: null, payloadSha256: null, sizeBytes: null, githubReleaseTag: null };
+  assert.equal(validators.get("resource-version")!(version), true);
+});
+
+test("staged versions are accepted only for the explicit publication handoff", async () => {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), "skills-registry-staged-"));
+  try {
+    await cp(rootDir, temporary, { recursive: true, filter: (source) => !source.includes(`${path.sep}node_modules${path.sep}`) && !source.includes(`${path.sep}.git${path.sep}`) && !source.endsWith(`${path.sep}dist`) });
+    const versionPath = path.join(temporary, "registry/projects/context7/resources/context7-mcp/versions/22222222-2222-4222-8222-222222222227.json");
+    const version = JSON.parse((await readFile(versionPath)).toString()) as Record<string, any>;
+    version.packaging = { mode: "staged", packagedAt: "2026-08-19T00:00:00Z", artifactFileName: null, artifactSha256: null, payloadSha256: null, sizeBytes: null, githubReleaseTag: null };
+    await writeFile(versionPath, `${JSON.stringify(version, null, 2)}\n`);
+    await writeIndex(temporary);
+    await assert.rejects(() => validateRepository(temporary), /transitório/);
+    const summary = await validateRepository(temporary, { allowStaged: true });
+    assert.equal(summary.versions, 7);
+    const resourcePath = path.join(temporary, "registry/projects/context7/resources/context7-mcp/resource.json");
+    const resource = JSON.parse((await readFile(resourcePath)).toString()) as Record<string, any>;
+    resource.official.license.redistribution = "link-only";
+    await writeFile(resourcePath, `${JSON.stringify(resource, null, 2)}\n`);
+    await writeIndex(temporary);
+    await assert.rejects(() => validateRepository(temporary, { allowStaged: true }), /staged exige licença/);
+  } finally {
+    await rm(temporary, { recursive: true, force: true });
+  }
+});
+
 test("link-only licenses cannot publish registry ZIPs", async () => {
   const temporary = await mkdtemp(path.join(os.tmpdir(), "skills-registry-license-"));
   try {

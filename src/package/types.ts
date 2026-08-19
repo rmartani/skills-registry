@@ -43,5 +43,8 @@ export interface ResourceVersionManifest {
   upstreamPublishedAt: string;
   approvedAt: string;
   officialDownloadUrl: string;
-  packaging: { mode: "registry-zip" | "link-only"; packagedAt: string; artifactFileName: string | null; artifactSha256: string | null; payloadSha256: string | null; sizeBytes: number | null; githubReleaseTag: string | null };
+  packaging:
+    | { mode: "registry-zip"; packagedAt: string; artifactFileName: string; artifactSha256: string; payloadSha256: string; sizeBytes: number; githubReleaseTag: string }
+    | { mode: "link-only"; packagedAt: string; artifactFileName: null; artifactSha256: null; payloadSha256: null; sizeBytes: null; githubReleaseTag: null }
+    | { mode: "staged"; packagedAt: string; artifactFileName: null; artifactSha256: null; payloadSha256: null; sizeBytes: null; githubReleaseTag: null };
 }

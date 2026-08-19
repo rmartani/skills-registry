@@ -43,9 +43,10 @@ npm test
 npm run validate
 npm run index
 npm run package:dry-run
+npm run package:prepare -- --output .generated/packages
 ```
 
-`npm run index` é determinístico. O CI exige que o índice gerado não produza diff. `npm run package:dry-run -- --live` baixa apenas archives oficiais para reconstruir assets em `.generated/packages/`; valida caminhos, limites e notices antes do inflate e nunca executa arquivos upstream. O SHA do ZIP é distinto do `payload.sha256` dentro de `STANCATTI-REGISTRY.json`, pois um ZIP não pode conter seu próprio SHA sem autorreferência.
+`npm run index` é determinístico. O CI exige que o índice gerado não produza diff no estado canônico. `npm run package:dry-run -- --live` baixa apenas archives oficiais para reconstruir assets em `.generated/packages/`; valida caminhos, limites e notices antes do inflate e nunca executa arquivos upstream. `npm run package:prepare` é reservado ao handoff pós-merge: converte somente versões `packaging.mode: staged` para `registry-zip` depois de gerar e conferir o pacote, atualizando apenas o manifesto da versão e o índice. O SHA do ZIP é distinto do `payload.sha256` dentro de `STANCATTI-REGISTRY.json`, pois um ZIP não pode conter seu próprio SHA sem autorreferência.
 
 Para resolver os seeds atuais sem alterar manifestos aprovados:
 
@@ -57,9 +58,9 @@ A saída fica somente em `.generated/seed/` (ignorada pelo Git) e contém releas
 
 ## Workflows
 
-- `validate.yml`: valida schemas/referências, testes, índice e dry-run sem rede upstream.
-- `daily-sync.yml`: schedule diário e `workflow_dispatch`; envia `scope`, `trigger` e uma chave idempotente para `POST /api/admin/registry/sync-runs` com `X-API-Key`.
-- `publish.yml`: somente em `main` e com `ENABLE_REGISTRY_PUBLISH=true`, reconstrói pacotes determinísticos, cria/atualiza Releases com `GITHUB_TOKEN` e solicita reconciliação por commit. O gate permanece desligado no repositório inicial.
+- `validate.yml`: valida schemas/referências, testes, regenera o índice e faz dry-run/live seguro; PRs de publicação podem carregar `staged`, sem receber token ou release.
+- `daily-sync.yml`: schedule diário e `workflow_dispatch`; `scope: all` mantém `resourceIds: []`, enquanto `scope: resources` exige `resource_ids` com UUIDs canônicos separados por vírgula; envia `scope`, `resourceIds`, `trigger` e uma chave idempotente para `POST /api/admin/registry/sync-runs` com `X-API-Key`.
+- `publish.yml`: somente em `main` e com `ENABLE_REGISTRY_PUBLISH=true`, converte `staged` pós-merge, comita apenas metadata/index gerados, reconstrói e verifica pacotes determinísticos, cria/atualiza Releases com `GITHUB_TOKEN` e solicita reconciliação pelo commit final. O gate permanece desligado no repositório inicial.
 
 Secrets usados pelo workflow diário/publicação:
 

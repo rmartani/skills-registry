@@ -14,6 +14,29 @@ export interface PackageBuildResult {
   fileName: string;
 }
 
+function safeVersionPart(label: string, maxLength = 160): string {
+  const normalized = label
+    .trim()
+    .replaceAll("/", "-")
+    .replaceAll("@", "at")
+    .replace(/[^A-Za-z0-9._-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .toLowerCase();
+  return (normalized || "version").slice(0, maxLength).replace(/-+$/g, "") || "version";
+}
+
+function resourceVersionPart(resource: ResourceManifest, version: ResourceVersionManifest): string {
+  return safeVersionPart(version.label, Math.max(1, 160 - resource.slug.length - 1));
+}
+
+export function artifactFileName(resource: ResourceManifest, version: ResourceVersionManifest): string {
+  return `${resource.slug}-${resourceVersionPart(resource, version)}.zip`;
+}
+
+export function githubReleaseTag(resource: ResourceManifest, version: ResourceVersionManifest): string {
+  return `resource/${resource.slug}/${resourceVersionPart(resource, version)}`;
+}
+
 function utf8(value: string): Uint8Array {
   return new TextEncoder().encode(value);
 }
@@ -44,6 +67,9 @@ export function buildDeterministicPackage(
   // so the resulting calendar fields are UTC-identical on every runner timezone.
   const zipMtime = new Date(packagedDate.getTime() + packagedDate.getTimezoneOffset() * 60_000);
   const artifact = zipSync(zipInput, { level: 6, mtime: zipMtime });
+  if (artifact.byteLength > (options.limits?.maxArchiveBytes ?? DEFAULT_ARCHIVE_LIMITS.maxArchiveBytes)) {
+    throw new Error(`ZIP excede ${options.limits?.maxArchiveBytes ?? DEFAULT_ARCHIVE_LIMITS.maxArchiveBytes} bytes.`);
+  }
   return {
     artifact,
     artifactSha256: sha256(artifact),
@@ -51,6 +77,6 @@ export function buildDeterministicPackage(
     payloadFileCount: payloadForHash.length,
     payloadBytes: payloadForHash.reduce((total, entry) => total + entry.data.byteLength, 0),
     provenance,
-    fileName: `${resource.slug}-${version.label.replaceAll("/", "-").replaceAll("@", "at")}.zip`
+    fileName: artifactFileName(resource, version)
   };
 }

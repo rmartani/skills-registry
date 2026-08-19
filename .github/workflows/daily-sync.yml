@@ -11,6 +11,11 @@ on:
         default: all
         type: choice
         options: [all, resources]
+      resource_ids:
+        description: "IDs UUID dos Resources, separados por vírgula (obrigatório quando scope=resources)"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read
@@ -35,14 +40,36 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           DISPATCH_SCOPE: ${{ inputs.scope }}
+          DISPATCH_RESOURCE_IDS: ${{ inputs.resource_ids }}
         run: |
           set -euo pipefail
           scope="${DISPATCH_SCOPE:-all}"
           case "$scope" in all|resources) ;; *) echo "scope inválido" >&2; exit 1 ;; esac
           trigger="scheduled"
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then trigger="manual"; fi
+          resource_ids_json='[]'
+          if [ "$scope" = "resources" ]; then
+            if [ "$EVENT_NAME" != "workflow_dispatch" ]; then
+              echo "scope resources só pode ser usado por workflow_dispatch" >&2
+              exit 1
+            fi
+            test -n "${DISPATCH_RESOURCE_IDS:-}" || { echo "scope resources exige resource_ids" >&2; exit 1; }
+            resource_ids_json="$(jq -cn --arg ids "$DISPATCH_RESOURCE_IDS" '$ids | split(",") | map(gsub("^[[:space:]]+|[[:space:]]+$"; "")) | map(select(length > 0)) | sort')"
+            if ! jq -e 'length > 0 and all(.[]; test("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"))' >/dev/null <<<"$resource_ids_json"; then
+              echo "resource_ids deve conter UUIDs canônicos separados por vírgula" >&2
+              exit 1
+            fi
+            if [ "$(jq 'length' <<<"$resource_ids_json")" -ne "$(jq 'unique | length' <<<"$resource_ids_json")" ]; then
+              echo "resource_ids não pode conter duplicatas" >&2
+              exit 1
+            fi
+          fi
           idempotency_key="daily-$(date -u +%F)"
-          request_body="$(jq -cn --arg scope "$scope" --arg trigger "$trigger" --arg key "$idempotency_key" '{scope:$scope,resourceIds:[],trigger:$trigger,idempotencyKey:$key}')"
+          if [ "$scope" = "resources" ]; then
+            resource_digest="$(printf '%s' "$resource_ids_json" | sha256sum | cut -d' ' -f1)"
+            idempotency_key="${idempotency_key}-resources-${resource_digest:0:16}"
+          fi
+          request_body="$(jq -cn --arg scope "$scope" --argjson resourceIds "$resource_ids_json" --arg trigger "$trigger" --arg key "$idempotency_key" '{scope:$scope,resourceIds:$resourceIds,trigger:$trigger,idempotencyKey:$key}')"
           response_file="$(mktemp)"
           trap 'rm -f "$response_file"' EXIT
           status="$(curl --fail-with-body --silent --show-error --output "$response_file" --write-out '%{http_code}' \
