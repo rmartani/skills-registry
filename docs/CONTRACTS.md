@@ -29,7 +29,7 @@ O manifesto canônico guarda apenas `publication.status` `active|deprecated`. Os
 
 Detecção não muda `recommendedVersionId`. Aprovação cria uma PR; somente merge em `main` seguido de reconcile torna a versão pública.
 
-`packaging.mode: staged` é um estado transitório explícito produzido pelo backend para uma versão aprovada cuja licença permite redistribuição, mas cujo ZIP ainda não foi construído. Ele mantém todos os campos de artefato nulos e só é aceito por `npm run validate -- --allow-staged` durante a PR de publicação. A validação de `main`, a preparação de release e o reconcile falham fechados enquanto existir `staged`; o workflow pós-merge converte-o para `registry-zip` somente depois de baixar, validar e empacotar o archive oficial. Recursos não redistribuíveis continuam `link-only` desde a PR e nunca passam por essa conversão.
+`packaging.mode: staged` é um estado transitório explícito produzido pelo backend para uma versão aprovada cuja licença permite redistribuição, mas cujo ZIP ainda não foi construído. Ele mantém todos os campos de artefato nulos e só é aceito por `npm run validate -- --allow-staged` durante uma PR backend-gerada em `registry/publication/*` quando `ENABLE_REGISTRY_PUBLISH=true`. Com o gate desligado, a CI rejeita `staged` com instrução para habilitá-lo ou converter o manifesto para `registry-zip`; validação de `main` e reconcile nunca tratam `staged` como estado publicável. O workflow pós-merge, somente com o gate explícito habilitado, converte-o para `registry-zip` depois de baixar, validar e empacotar o archive oficial. Recursos não redistribuíveis continuam `link-only` desde a PR e nunca passam por essa conversão.
 
 ## Index
 
@@ -85,7 +85,7 @@ Limites default:
 
 ### Validação
 
-`validate.yml` usa permissões `contents: read`, `npm ci --ignore-scripts`, build, testes, regenera o índice antes da validação e reconstrói os ZIPs aprovados com `package:dry-run --live` usando somente archives oficiais. Em uma PR de publicação, a divergência do índice é deliberadamente deixada para o handoff pós-merge (isso também evita deadlock quando a API não escreve um índice gerado); nenhum asset é criado para o estado `staged`. O packager aplica limites antes do inflate e nunca executa conteúdo upstream. Pull Requests nunca recebem token de publicação.
+`validate.yml` usa permissões `contents: read`, `npm ci --ignore-scripts`, build, testes, regenera o índice antes da validação e reconstrói os ZIPs aprovados com `package:dry-run --live` usando somente archives oficiais. Apenas uma PR backend-gerada em `registry/publication/*` com `ENABLE_REGISTRY_PUBLISH=true` pode carregar `staged`; com o gate desligado, um erro acionável orienta habilitar a variável e repetir a PR ou converter para `registry-zip`. Nessa PR, a divergência do índice é deliberadamente deixada para o handoff pós-merge (isso também evita deadlock quando a API não escreve um índice gerado); nenhum asset é criado para o estado `staged`. O push de `main` tolera esse estado somente durante o handoff explicitamente habilitado, que executa `package:prepare` antes de release/reconcile. O packager aplica limites antes do inflate e nunca executa conteúdo upstream. Pull Requests nunca recebem token de publicação.
 
 ### Sync diário/manual
 

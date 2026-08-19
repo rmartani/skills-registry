@@ -12,11 +12,16 @@ async function workflow(name: string): Promise<string> {
 test("validation workflow regenerates index before checking staged publication PRs", async () => {
   const content = await workflow("validate.yml");
   assert.ok(content.indexOf("Rebuild generated index before validation") < content.indexOf("Validate schemas and references"));
-  assert.match(content, /REGISTRY_ALLOW_STAGED:.*startsWith\(github\.head_ref, 'registry\/publication\/'\)/);
+  assert.match(content, /REGISTRY_ALLOW_STAGED:.*startsWith\(github\.head_ref, 'registry\/publication\/'\).*vars\.ENABLE_REGISTRY_PUBLISH == 'true'/);
   assert.match(content, /packaging\.mode == "staged"/);
-  assert.match(content, /Index drift is deferred to the post-merge staged packaging handoff/);
-  assert.match(content, /PUBLICATION_PR:/);
+  assert.match(content, /Reject staged versions outside the gated publication handoff/);
+  assert.match(content, /packaging\.mode=staged is accepted only on a backend-generated registry\/publication\/\* PR when ENABLE_REGISTRY_PUBLISH=true/);
+  assert.match(content, /Main validation and reconcile reject staged metadata/);
+  assert.match(content, /if \[ -n "\$staged_id" \] && \[ "\$ALLOW_STAGED" = "true" \]/);
+  assert.match(content, /Index drift is deferred only to the gated post-merge staged packaging handoff/);
+  assert.match(content, /PUBLICATION_PR:.*startsWith\(github\.head_ref, 'registry\/publication\/'\).*vars\.ENABLE_REGISTRY_PUBLISH == 'true'/);
   assert.match(content, /package:dry-run -- --live --allow-staged/);
+  assert.doesNotMatch(content, /if \{ \[ "\$PUBLICATION_PR" = "true" \] \|\| \{ \[ "\$EVENT_NAME" = "push" \]/);
 });
 
 test("publication workflow converts staged state before release and reconciles final commit", async () => {

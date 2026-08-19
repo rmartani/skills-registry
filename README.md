@@ -58,7 +58,7 @@ A saída fica somente em `.generated/seed/` (ignorada pelo Git) e contém releas
 
 ## Workflows
 
-- `validate.yml`: valida schemas/referências, testes, regenera o índice e faz dry-run/live seguro; PRs de publicação podem carregar `staged`, sem receber token ou release.
+- `validate.yml`: valida schemas/referências, testes, regenera o índice e faz dry-run/live seguro; somente PRs backend-geradas em `registry/publication/*` com `ENABLE_REGISTRY_PUBLISH=true` podem carregar `staged` (o handoff pós-merge é transitório), sem receber token ou release. Com o gate desligado, a CI falha com instrução para habilitá-lo ou converter para `registry-zip`.
 - `daily-sync.yml`: schedule diário e `workflow_dispatch`; `scope: all` mantém `resourceIds: []`, enquanto `scope: resources` exige `resource_ids` com UUIDs canônicos separados por vírgula; envia `scope`, `resourceIds`, `trigger` e uma chave idempotente para `POST /api/admin/registry/sync-runs` com `X-API-Key`.
 - `publish.yml`: somente em `main` e com `ENABLE_REGISTRY_PUBLISH=true`, converte `staged` pós-merge, comita apenas metadata/index gerados, reconstrói e verifica pacotes determinísticos, cria/atualiza Releases com `GITHUB_TOKEN` e solicita reconciliação pelo commit final. O gate permanece desligado no repositório inicial.
 
