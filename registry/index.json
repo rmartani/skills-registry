@@ -87,6 +87,246 @@
       "sha256": "9082410c7a51f22f6598dd24e18cbb02babdd1a9cf0d2a7c6da93efe226dc395"
     },
     {
+      "path": "projects/obra-superpowers/collections/superpowers-resources.json",
+      "kind": "collection",
+      "id": "390ef641-29f7-4d9f-ab95-fd87e20cc132",
+      "sha256": "2d6f56c86f8adea7dca9bc20f0be44d8cf605ad34884f8dbb37c450d57ee64dc"
+    },
+    {
+      "path": "projects/obra-superpowers/project.json",
+      "kind": "project",
+      "id": "f5a75356-8765-4191-a05e-5d28f4d71a46",
+      "sha256": "116e6e666e2d8afd9b541a9b7772ac4653701730aec6b0ddf9dbac654deef3b0"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-brainstorm-server/resource.json",
+      "kind": "resource",
+      "id": "05ab9b7b-6de4-48b6-83ef-e1ee301a7808",
+      "sha256": "190cea3e2173562a24b3b44092d56f67408a44413bc29698661dfeaa5dd28eed"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-brainstorm-server/versions/7b447059-450b-4db0-8fe7-20010aac7ac8.json",
+      "kind": "resource-version",
+      "id": "7b447059-450b-4db0-8fe7-20010aac7ac8",
+      "sha256": "974b2566d4600493bc1823191ac5a14a6d27331eda37315f0e8a828bb15e779b"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-brainstorming/resource.json",
+      "kind": "resource",
+      "id": "b84d295d-8ccb-4676-91ea-c6bbc7a905df",
+      "sha256": "e3aae39d46560a9d341e5590bdfa6813dcaa741810952fdfb1e268112190c8de"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-brainstorming/versions/5d19af39-1bd7-49e9-bd59-d0aa80f6976b.json",
+      "kind": "resource-version",
+      "id": "5d19af39-1bd7-49e9-bd59-d0aa80f6976b",
+      "sha256": "06d767c0c04a1841a9cb1c1f56b405e91a74de6d116e81a7baac9d733ab6e3a8"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-claude-plugin/resource.json",
+      "kind": "resource",
+      "id": "b8f78c66-db8a-4016-9a4d-76dd8101f4b2",
+      "sha256": "c3b54ed9eae7512c8bf5d981206c84fb29ccd1b363b39f66f635ed3e239d4f21"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-claude-plugin/versions/4b1d4f28-a0e0-48b6-a234-087c3570ab4d.json",
+      "kind": "resource-version",
+      "id": "4b1d4f28-a0e0-48b6-a234-087c3570ab4d",
+      "sha256": "669d178900f57dc33ab5334fbeb92b269f71f6657b86b6e0d9294d5eae4f5a26"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-cursor-plugin/resource.json",
+      "kind": "resource",
+      "id": "73a881e9-9cd2-48ed-ae28-c208932f6ab6",
+      "sha256": "df3f9d067c83acb63a0a6fcdf5939c7136e96d76f37f0519c69f52bac2b66706"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-cursor-plugin/versions/b587fb91-ec7a-41b8-9444-b542ddfc61ec.json",
+      "kind": "resource-version",
+      "id": "b587fb91-ec7a-41b8-9444-b542ddfc61ec",
+      "sha256": "f3f1927c1313fa9408b5dea0fbe2fe639092e477cb62e5fff771450e58dd5d4f"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-dispatching-parallel-agents/resource.json",
+      "kind": "resource",
+      "id": "4643c560-a933-4a96-be48-eb7facd61589",
+      "sha256": "46bfbe7c3f00066ef2bf464a10263a74f656e82c3406983d5854cca0ea867a67"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-dispatching-parallel-agents/versions/a5cbadce-148f-4d72-a433-d9d513f91de8.json",
+      "kind": "resource-version",
+      "id": "a5cbadce-148f-4d72-a433-d9d513f91de8",
+      "sha256": "4ce489bf0e752ff4bb1afbbf1cb89b254df47b7c10dcbbb950bcd823c3cdbd90"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-executing-plans/resource.json",
+      "kind": "resource",
+      "id": "e47809af-954b-4099-907c-66a803a28f65",
+      "sha256": "add1e22379b35494d5ab563b345f05b3847f9fb56617173ce397efe1ba61391a"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-executing-plans/versions/1b6d9a5a-e9b6-4a61-b1c6-718637b5792b.json",
+      "kind": "resource-version",
+      "id": "1b6d9a5a-e9b6-4a61-b1c6-718637b5792b",
+      "sha256": "214ab81ef8e2fcafb2d2f91408d453c6cf4dc85e8844898231d8f789d00a3e93"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-finishing-a-development-branch/resource.json",
+      "kind": "resource",
+      "id": "71134d0a-5dca-47dd-9b3f-c5096bf5574a",
+      "sha256": "fadeaa80a2955169fdc8c66dccf36e69a74ecdf81701da20c14562c63e74dc58"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-finishing-a-development-branch/versions/58f9767f-248a-47af-8ca1-f7d5ab7ef940.json",
+      "kind": "resource-version",
+      "id": "58f9767f-248a-47af-8ca1-f7d5ab7ef940",
+      "sha256": "2925fb697f4bf55dda88669462c0d57e55e43b71374c346d5429fb918bac8b83"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-gemini-extension/resource.json",
+      "kind": "resource",
+      "id": "229e3027-8fb5-4942-b757-b0f6a41eaa26",
+      "sha256": "d9a064c67285f0c509b03df5b70f97ad1a8c65027510a4c1c38ef7ecfe473264"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-gemini-extension/versions/a7f5413c-258d-4cdc-81cc-15c2b07437a3.json",
+      "kind": "resource-version",
+      "id": "a7f5413c-258d-4cdc-81cc-15c2b07437a3",
+      "sha256": "9b37cee0cd38cb66bfdf9962b3996e0210b0b9d76b955e6c05de7434ed0c0da9"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-plugins/resource.json",
+      "kind": "resource",
+      "id": "1bffd192-5d11-4a3f-9b93-b5ab7b0693e4",
+      "sha256": "66331c823a457da1c12296c0c68b925b5a22b097d51312f6c9bcebbb02c7c24c"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-plugins/versions/0fa50ab9-c678-4bbc-998c-1c9dcd412641.json",
+      "kind": "resource-version",
+      "id": "0fa50ab9-c678-4bbc-998c-1c9dcd412641",
+      "sha256": "73633675b0446d06c19ecbfc6afd83ad1f5540fa9be5f9dcaa8a6bed5a565f6c"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-receiving-code-review/resource.json",
+      "kind": "resource",
+      "id": "f6c9bf17-e68b-46f4-beb9-dcb6d012bdbc",
+      "sha256": "9972c1daf9aebb17fb8c52482f9809e9eb1eb084082896abf5a855d2557268fb"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-receiving-code-review/versions/56e3ad6d-68f9-4542-94d8-96820a991cf1.json",
+      "kind": "resource-version",
+      "id": "56e3ad6d-68f9-4542-94d8-96820a991cf1",
+      "sha256": "3a38691081ee3a5735abad4a13e6b634f23ebf19d38566bb24b2a8890a7e58d2"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-requesting-code-review/resource.json",
+      "kind": "resource",
+      "id": "71f0f42a-4919-41b6-af74-edefcb362d35",
+      "sha256": "7c4d2f06ae8f0742fe22847a7f8f1082507c9a7cd33f55a6c0aee218f5d9a12f"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-requesting-code-review/versions/86207395-c28c-4d39-81f3-e9535975786f.json",
+      "kind": "resource-version",
+      "id": "86207395-c28c-4d39-81f3-e9535975786f",
+      "sha256": "149f749c71e9249fa53b58e5f7400769c99cc7a7613e8c523e31e920d427fe92"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-subagent-driven-development/resource.json",
+      "kind": "resource",
+      "id": "bfe7650c-0713-4ca7-9795-74dcc5930bb9",
+      "sha256": "bbdca7d7eb6122b0533e6c9369bf336b6732012e4bfd6ac5c3a56e3cf40c4053"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-subagent-driven-development/versions/529da525-3399-4cb0-9808-66a8ab39de4f.json",
+      "kind": "resource-version",
+      "id": "529da525-3399-4cb0-9808-66a8ab39de4f",
+      "sha256": "3f4d9100d4d596efb8f86a3d9a3c8694f64e962283292afe0e704edf5cc40946"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-systematic-debugging/resource.json",
+      "kind": "resource",
+      "id": "7b4c3778-c97e-45a7-927a-25e1623d4f8b",
+      "sha256": "bb150f953c7447e7cc6545ee724e5ff252952b14cfc8d2f84f5028a35f0e55fb"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-systematic-debugging/versions/c0371219-80ff-4faa-978d-aea31ea72a25.json",
+      "kind": "resource-version",
+      "id": "c0371219-80ff-4faa-978d-aea31ea72a25",
+      "sha256": "573174c15c377d083f60147dc81f162cc24eb4374e7e937a6a177fc9e492f488"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-test-driven-development/resource.json",
+      "kind": "resource",
+      "id": "04287240-74b6-43e0-a192-fbee8794271f",
+      "sha256": "8ab4eff2914c6b2c36514cb9e868dba3cb5e4670c50809199fea50a486202b46"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-test-driven-development/versions/14a4f7bd-c93f-4f84-bfb4-c4eee5fa79f3.json",
+      "kind": "resource-version",
+      "id": "14a4f7bd-c93f-4f84-bfb4-c4eee5fa79f3",
+      "sha256": "4b4515b858f28ccece029c630493f736bc966fb994d61320c6ff45047481b76b"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-using-git-worktrees/resource.json",
+      "kind": "resource",
+      "id": "22f4c2e3-f703-44d7-8b0f-c797bc1ceffd",
+      "sha256": "ae4cd30bd583f74f02861a24e857e4fee8d62c3833c1b55cc3d888ff27a8c2c6"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-using-git-worktrees/versions/d8a5aca3-05fe-42c0-8153-9f33cecd949f.json",
+      "kind": "resource-version",
+      "id": "d8a5aca3-05fe-42c0-8153-9f33cecd949f",
+      "sha256": "19bdbbfc98826b192672d7b74e9cb7cfd97de5ba383a8fb44f3fc59cfed82451"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-using-superpowers/resource.json",
+      "kind": "resource",
+      "id": "5b92dc71-79f8-40f0-a642-c0d648f9e1dd",
+      "sha256": "32855571c5d4ef58907fa98d63dab054c4085561bd297a8eb3bf212f269c5df7"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-using-superpowers/versions/e52d4599-db17-4c5f-995b-f10257e0d895.json",
+      "kind": "resource-version",
+      "id": "e52d4599-db17-4c5f-995b-f10257e0d895",
+      "sha256": "14b6e09f75a115b7365cd3fa4ac74fa0e14120499841bc876d92dc4d8aa0c9ea"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-verification-before-completion/resource.json",
+      "kind": "resource",
+      "id": "b566d3d9-b786-4092-8d42-136a22a77cdc",
+      "sha256": "028a9dddf852f3e985cc93744afb308a4c272a0eda0a00276f4e9992c860c863"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-verification-before-completion/versions/7020dfc7-ccae-4f39-a5c9-76f75d1a526c.json",
+      "kind": "resource-version",
+      "id": "7020dfc7-ccae-4f39-a5c9-76f75d1a526c",
+      "sha256": "49f01c8ed3c25f346a5666ae3192fbd95b16d87a2048d00c7afbd58659d7d075"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-writing-plans/resource.json",
+      "kind": "resource",
+      "id": "bc2bfa90-cd89-4b2b-b789-361de1fd3c59",
+      "sha256": "15d8bf50650f0c3f1abcdb13f374545c00ff6aea9c03afdaa08b4f47ebcd6b73"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-writing-plans/versions/ab371958-b83d-4f4f-81b2-5109053d44fa.json",
+      "kind": "resource-version",
+      "id": "ab371958-b83d-4f4f-81b2-5109053d44fa",
+      "sha256": "17c9e0fe4423eb6c9bc5e6a92ae83a1a990c098c2a5e61d87bb0e405d3d89fe5"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-writing-skills/resource.json",
+      "kind": "resource",
+      "id": "66f2068b-65f5-47ed-818a-119279f2017c",
+      "sha256": "d992b3b0ce2f92d587b25343f4fe12b7089ccdb572326ace5a090365df69a822"
+    },
+    {
+      "path": "projects/obra-superpowers/resources/obra-superpowers-writing-skills/versions/eead6a1a-de58-4484-8802-b57935765056.json",
+      "kind": "resource-version",
+      "id": "eead6a1a-de58-4484-8802-b57935765056",
+      "sha256": "2166ffbac4aac636fcd3a61983aefab67c4ddeba86b97ab5217dc7dba65f1db2"
+    },
+    {
       "path": "projects/superpowers/collections/superpowers-tools.json",
       "kind": "collection",
       "id": "33333333-3333-4333-8333-333333333334",
