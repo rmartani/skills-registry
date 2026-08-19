@@ -59,6 +59,19 @@
             "sizeBytes": { "type": "null" },
             "githubReleaseTag": { "type": "null" }
           }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["mode", "packagedAt", "artifactFileName", "artifactSha256", "payloadSha256", "sizeBytes", "githubReleaseTag"],
+          "properties": {
+            "mode": { "const": "staged" },
+            "packagedAt": { "$ref": "#/$defs/timestamp" },
+            "artifactFileName": { "type": "null" },
+            "artifactSha256": { "type": "null" },
+            "payloadSha256": { "type": "null" },
+            "sizeBytes": { "type": "null" },
+            "githubReleaseTag": { "type": "null" }
+          }
         }
       ]
     }

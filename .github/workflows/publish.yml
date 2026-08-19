@@ -8,14 +8,21 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: skills-registry-publish-main
+  cancel-in-progress: false
+
 jobs:
   publish:
     # Explicit opt-in prevents an initial repository push from publishing assets.
-    if: vars.ENABLE_REGISTRY_PUBLISH == 'true'
+    # The generated handoff commit skips this job and is verified by the same
+    # validate workflow instead of recursively publishing itself.
+    if: vars.ENABLE_REGISTRY_PUBLISH == 'true' && !contains(github.event.head_commit.message, '[skip registry publish]')
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
       GH_TOKEN: ${{ github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
       STANCATTI_API_URL: ${{ secrets.STANCATTI_API_URL }}
       STANCATTI_API_KEY: ${{ secrets.STANCATTI_API_KEY }}
     steps:
@@ -23,6 +30,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: main
+          fetch-depth: 0
       - name: Setup Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -30,38 +38,91 @@ jobs:
           cache: npm
       - name: Install without lifecycle scripts
         run: npm ci --ignore-scripts
-      - name: Validate before publishing
+      - name: Validate publication input
+        env:
+          REGISTRY_ALLOW_STAGED: "true"
         run: |
           npm run build
           npm test
-          npm run validate
           npm run index
+          npm run validate
           git diff --exit-code -- registry/index.json
-      - name: Rebuild deterministic approved packages
+      - name: Convert explicit staged versions after merge
+        run: npm run package:prepare -- --output .generated/staged-packages
+      - name: Validate converted canonical state
+        env:
+          REGISTRY_ALLOW_STAGED: "false"
+        run: |
+          npm run index
+          npm run validate
+      - name: Rebuild every approved registry ZIP
         run: npm run package:dry-run -- --live --output .generated/packages
-      - name: Create or update resource releases
+      - name: Commit only generated package metadata and index
+        id: handoff
         shell: bash
         run: |
           set -euo pipefail
-          while IFS= read -r -d '' manifest; do
-            mode="$(jq -r '.packaging.mode' "$manifest")"
-            [ "$mode" = "registry-zip" ] || continue
-            tag="$(jq -r '.packaging.githubReleaseTag' "$manifest")"
-            file="$(jq -r '.packaging.artifactFileName' "$manifest")"
-            title="$(jq -r '.resourceId + " " + .label' "$manifest")"
-            if ! gh release view "$tag" >/dev/null 2>&1; then
-              gh release create "$tag" --target "$GITHUB_SHA" --title "$title" --notes "Deterministic asset for the approved registry manifest."
+          allowed='^(registry/index\.json|registry/projects/[^/]+/resources/[^/]+/versions/[^/]+\.json)$'
+          # Include untracked files too: an unexpected generated path must fail
+          # closed rather than being silently omitted from the handoff commit.
+          changed="$(git status --porcelain=v1 --untracked-files=all | sed -E 's/^.. //')"
+          if [ -n "$changed" ] && printf '%s\n' "$changed" | grep -Ev "$allowed" | grep -q .; then
+            echo "A preparação staged alterou um caminho não gerado:" >&2
+            printf '%s\n' "$changed" | grep -Ev "$allowed" >&2
+            exit 1
+          fi
+          if [ -n "$changed" ]; then
+            git add registry/index.json
+            while IFS= read -r file; do
+              [ -z "$file" ] || git add "$file"
+            done < <(printf '%s\n' "$changed" | grep -E '^registry/projects/[^/]+/resources/[^/]+/versions/[^/]+\.json$' || true)
+            cached="$(git diff --cached --name-only)"
+            if [ -n "$cached" ] && printf '%s\n' "$cached" | grep -Ev "$allowed" | grep -q .; then
+              echo "O commit de handoff contém um caminho não gerado:" >&2
+              printf '%s\n' "$cached" | grep -Ev "$allowed" >&2
+              exit 1
             fi
-            gh release upload "$tag" ".generated/packages/$file" ".generated/packages/$file.sha256" --clobber
-          done < <(find registry/projects -type f -path '*/resources/*/versions/*.json' -print0 | sort -z)
-      - name: Reconcile main commit in API
+            git diff --cached --check
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore: finalize staged registry packages [skip registry publish]"
+            git push origin HEAD:main
+          fi
+          echo "publish_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Create or update verified resource releases
         shell: bash
+        env:
+          PUBLISH_SHA: ${{ steps.handoff.outputs.publish_sha }}
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' manifest; do
+            mode="$(jq -er '.packaging.mode' "$manifest")"
+            [ "$mode" = "registry-zip" ] || continue
+            tag="$(jq -er '.packaging.githubReleaseTag' "$manifest")"
+            file="$(jq -er '.packaging.artifactFileName' "$manifest")"
+            expected_sha="$(jq -er '.packaging.artifactSha256' "$manifest")"
+            expected_size="$(jq -er '.packaging.sizeBytes' "$manifest")"
+            title="$(jq -er '.resourceId + " " + .label' "$manifest")"
+            artifact=".generated/packages/$file"
+            test -f "$artifact"
+            test "$(stat -c '%s' "$artifact")" = "$expected_size"
+            printf '%s  %s\n' "$expected_sha" "$artifact" | sha256sum --check --status
+            printf '%s  %s\n' "$expected_sha" "$file" | cmp -s - "$artifact.sha256"
+            if ! gh release view "$tag" >/dev/null 2>&1; then
+              gh release create "$tag" --target "$PUBLISH_SHA" --title "$title" --notes "Deterministic asset for the approved registry manifest."
+            fi
+            gh release upload "$tag" "$artifact" "$artifact.sha256" --clobber
+          done < <(find registry/projects -type f -path '*/resources/*/versions/*.json' -print0 | sort -z)
+      - name: Reconcile verified main commit in API
+        shell: bash
+        env:
+          PUBLISH_SHA: ${{ steps.handoff.outputs.publish_sha }}
         run: |
           set -euo pipefail
           test -n "$STANCATTI_API_URL"
           test -n "$STANCATTI_API_KEY"
           case "$STANCATTI_API_URL" in https://*) ;; *) echo "STANCATTI_API_URL precisa usar HTTPS" >&2; exit 1 ;; esac
-          body="$(jq -cn --arg sha "$GITHUB_SHA" '{commitSha:$sha}')"
+          body="$(jq -cn --arg sha "$PUBLISH_SHA" '{commitSha:$sha}')"
           response_file="$(mktemp)"
           trap 'rm -f "$response_file"' EXIT
           status="$(curl --fail-with-body --silent --show-error --output "$response_file" --write-out '%{http_code}' \
@@ -70,4 +131,4 @@ jobs:
             --header "X-API-Key: $STANCATTI_API_KEY" \
             --data "$body")"
           case "$status" in 2??) ;; *) echo "Reconcile falhou com HTTP $status; assets permanecem disponíveis para retry" >&2; exit 1 ;; esac
-          echo "Reconcile solicitado para $GITHUB_SHA"
+          echo "Reconcile solicitado para $PUBLISH_SHA"

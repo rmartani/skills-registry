@@ -29,6 +29,8 @@ O manifesto canônico guarda apenas `publication.status` `active|deprecated`. Os
 
 Detecção não muda `recommendedVersionId`. Aprovação cria uma PR; somente merge em `main` seguido de reconcile torna a versão pública.
 
+`packaging.mode: staged` é um estado transitório explícito produzido pelo backend para uma versão aprovada cuja licença permite redistribuição, mas cujo ZIP ainda não foi construído. Ele mantém todos os campos de artefato nulos e só é aceito por `npm run validate -- --allow-staged` durante uma PR backend-gerada em `registry/publication/*` quando `ENABLE_REGISTRY_PUBLISH=true`. Com o gate desligado, a CI rejeita `staged` com instrução para habilitá-lo ou converter o manifesto para `registry-zip`; validação de `main` e reconcile nunca tratam `staged` como estado publicável. O workflow pós-merge, somente com o gate explícito habilitado, converte-o para `registry-zip` depois de baixar, validar e empacotar o archive oficial. Recursos não redistribuíveis continuam `link-only` desde a PR e nunca passam por essa conversão.
+
 ## Index
 
 `registry/index.json` contém somente manifestos sob `registry/projects`. Cada entrada tem `path`, `kind`, `id` e SHA-256 dos bytes exatos do arquivo. Entradas são ordenadas por comparação lexical de bytes/código Unicode do caminho. Não há timestamp de geração; portanto duas gerações sem mudanças produzem bytes idênticos.
@@ -67,7 +69,7 @@ Limites default:
 | arquivos | 10.000 |
 | caminho | 240 caracteres |
 
-`redistribution: allowed` exige todos os `noticePaths` no pacote. `link-only` nunca gera ZIP e mantém o link oficial; também pode ser usado por uma política de segurança quando o archive upstream não pode ser empacotado sem symlinks. Um manifesto com licença `link-only` nunca pode declarar `registry-zip`. Licenças MIT dos seeds permitem redistribuição do código com avisos, mas não de marcas ou serviços hospedados.
+`redistribution: allowed` exige todos os `noticePaths` no pacote. `link-only` nunca gera ZIP e mantém o link oficial; também pode ser usado por uma política de segurança quando o archive upstream não pode ser empacotado sem symlinks. `staged` só é válido com `redistribution: allowed`, não tem asset nem checksum e nunca pode ser reconciliado. Um manifesto com licença `link-only` nunca pode declarar `registry-zip` ou `staged`. Licenças MIT dos seeds permitem redistribuição do código com avisos, mas não de marcas ou serviços hospedados.
 
 ## Seeds oficiais
 
@@ -83,12 +85,12 @@ Limites default:
 
 ### Validação
 
-`validate.yml` usa permissões `contents: read`, `npm ci --ignore-scripts`, build, testes, validação, regeneração do índice e reconstrói os ZIPs aprovados com `package:dry-run --live` usando somente archives oficiais. O packager aplica limites antes do inflate e nunca executa conteúdo upstream. Pull Requests nunca recebem token de publicação.
+`validate.yml` usa permissões `contents: read`, `npm ci --ignore-scripts`, build, testes, regenera o índice antes da validação e reconstrói os ZIPs aprovados com `package:dry-run --live` usando somente archives oficiais. Apenas uma PR backend-gerada em `registry/publication/*` com `ENABLE_REGISTRY_PUBLISH=true` pode carregar `staged`; com o gate desligado, um erro acionável orienta habilitar a variável e repetir a PR ou converter para `registry-zip`. Nessa PR, a divergência do índice é deliberadamente deixada para o handoff pós-merge (isso também evita deadlock quando a API não escreve um índice gerado); nenhum asset é criado para o estado `staged`. O push de `main` tolera esse estado somente durante o handoff explicitamente habilitado, que executa `package:prepare` antes de release/reconcile. O packager aplica limites antes do inflate e nunca executa conteúdo upstream. Pull Requests nunca recebem token de publicação.
 
 ### Sync diário/manual
 
-`daily-sync.yml` roda por schedule e `workflow_dispatch`. Gera chave UTC `daily-YYYY-MM-DD`, chama `POST /api/admin/registry/sync-runs` com `scope: all`, `trigger: scheduled|manual` e `idempotencyKey`. O backend consulta upstream, registra candidatos e expõe a preparação de PR; nenhum conteúdo externo é executado e nenhuma PR é mesclada pelo workflow.
+`daily-sync.yml` roda por schedule e `workflow_dispatch`. O schedule e o dispatch com `scope: all` mantêm `resourceIds: []` e a chave UTC `daily-YYYY-MM-DD`; o dispatch com `scope: resources` exige `resource_ids` com um ou mais UUIDs canônicos separados por vírgula, envia esses IDs e usa uma chave derivada do conjunto para não colidir com o sync diário completo. O backend consulta upstream, registra candidatos e expõe a preparação de PR; nenhum conteúdo externo é executado e nenhuma PR é mesclada pelo workflow.
 
 ### Publish/reconcile
 
-`publish.yml` roda em push de `main` somente quando a variável explícita `ENABLE_REGISTRY_PUBLISH=true` está habilitada. Por padrão, o gate permanece desligado para que a criação/push inicial não publique releases. Quando habilitado após revisão operacional, valida novamente, reconstrói exatamente os ZIPs aprovados com `--live`, cria/atualiza tags de Release `resource/{slug}/{version}` e envia `.sha256`. Por fim chama `POST /api/admin/registry/reconcile` com o commit de `main`. Falhas de callback não apagam assets; a reconciliação pode ser repetida.
+`publish.yml` roda em push de `main` somente quando a variável explícita `ENABLE_REGISTRY_PUBLISH=true` está habilitada. Por padrão, o gate permanece desligado para que a criação/push inicial não publique releases. Quando habilitado após revisão operacional, aceita `staged` apenas como entrada transitória, executa `package:prepare` para baixar/validar os archives e calcular deterministicamente `artifactSha256`, `payloadSha256`, tamanho, nome e tag, regenera `registry/index.json`, valida sem `staged`, e comita somente versões geradas e índice. O commit recebe `[skip registry publish]` para não recursar o workflow. Só depois do push desse commit o workflow reconstrói todos os ZIPs verificados, confere SHA/tamanho, cria/atualiza tags de Release `resource/{slug}/{version}` e envia `.sha256`; por fim chama `POST /api/admin/registry/reconcile` com o SHA final. Falhas de preparação, checksums, assets ou callback não reconciliam conteúdo não verificado; assets já criados permanecem disponíveis para retry.

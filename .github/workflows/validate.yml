@@ -12,6 +12,11 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      # Only a gated backend publication PR may carry staged metadata. The
+      # gated main push is a transient handoff so publish.yml can convert it
+      # before releasing or reconciling.
+      REGISTRY_ALLOW_STAGED: ${{ (github.event_name == 'pull_request' && startsWith(github.head_ref, 'registry/publication/') && vars.ENABLE_REGISTRY_PUBLISH == 'true') || (github.event_name == 'push' && vars.ENABLE_REGISTRY_PUBLISH == 'true') }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -26,11 +31,42 @@ jobs:
         run: npm run build
       - name: Tests
         run: npm test
+      - name: Rebuild generated index before validation
+        run: npm run index
+      - name: Reject staged versions outside the gated publication handoff
+        shell: bash
+        env:
+          ALLOW_STAGED: ${{ env.REGISTRY_ALLOW_STAGED }}
+        run: |
+          set -euo pipefail
+          staged_ids="$(find registry/projects -type f -path '*/resources/*/versions/*.json' -print0 | xargs -0 -r jq -r 'select(.packaging.mode == "staged") | .id' | sort)"
+          if [ -z "$staged_ids" ] || [ "$ALLOW_STAGED" = "true" ]; then
+            exit 0
+          fi
+          echo "::error title=Staged packaging is not mergeable::packaging.mode=staged is accepted only on a backend-generated registry/publication/* PR when ENABLE_REGISTRY_PUBLISH=true."
+          echo "Found staged version(s):"
+          printf '%s\n' "$staged_ids"
+          echo "Enable the repository variable ENABLE_REGISTRY_PUBLISH=true and rerun the publication PR, or convert the version to registry-zip before merging. Main validation and reconcile reject staged metadata."
+          exit 1
       - name: Validate schemas and references
         run: npm run validate
-      - name: Rebuild generated index
-        run: npm run index
-      - name: Require committed generated index
-        run: git diff --exit-code -- registry/index.json
+      - name: Require committed generated index unless staged handoff is present
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          ALLOW_STAGED: ${{ env.REGISTRY_ALLOW_STAGED }}
+          PUBLICATION_PR: ${{ github.event_name == 'pull_request' && startsWith(github.head_ref, 'registry/publication/') && vars.ENABLE_REGISTRY_PUBLISH == 'true' }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- registry/index.json; then
+            exit 0
+          fi
+          staged_id="$(find registry/projects -type f -path '*/resources/*/versions/*.json' -print0 | xargs -0 -r jq -r 'select(.packaging.mode == "staged") | .id' | head -n 1)"
+          if [ -n "$staged_id" ] && [ "$ALLOW_STAGED" = "true" ] && { [ "$PUBLICATION_PR" = "true" ] || [ "$EVENT_NAME" = "push" ]; }; then
+            echo "Index drift is deferred only to the gated post-merge staged packaging handoff ($staged_id); package:prepare must convert it before release/reconcile."
+            exit 0
+          fi
+          echo "registry/index.json is out of date; run npm run index and commit the generated index before merging." >&2
+          git diff --exit-code -- registry/index.json
       - name: Rebuild approved packages without executing upstream
-        run: npm run package:dry-run -- --live --output .generated/packages
+        run: npm run package:dry-run -- --live --allow-staged --output .generated/packages

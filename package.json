@@ -14,6 +14,7 @@
     "validate": "tsx src/cli.ts validate",
     "index": "tsx src/cli.ts index",
     "package:dry-run": "tsx src/cli.ts package:dry-run",
+    "package:prepare": "tsx src/cli.ts package:prepare",
     "seed:resolve": "tsx src/cli.ts seed:resolve",
     "check:index": "npm run index && git diff --exit-code -- registry/index.json"
   },

@@ -65,6 +65,14 @@ export interface ValidationSummary {
   redirects: number;
 }
 
+export interface ValidationOptions {
+  /**
+   * Staged versions are only allowed while a backend-generated publication PR
+   * is being checked. They must be converted before main is reconciled.
+   */
+  allowStaged?: boolean;
+}
+
 function isRecord(value: unknown): value is RegistryDocument {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -178,8 +186,9 @@ function asSet(values: unknown[]): Set<string> {
   return new Set(values.filter((value): value is string => typeof value === "string"));
 }
 
-export async function validateRepository(rootDir: string): Promise<ValidationSummary> {
+export async function validateRepository(rootDir: string, options: ValidationOptions = {}): Promise<ValidationSummary> {
   const issues: ValidationIssue[] = [];
+  const allowStaged = options.allowStaged === true;
   const validators = await createSchemaValidators(rootDir);
   const files = await collectManifestFiles(rootDir);
   const byKind = new Map<ManifestKind, ManifestFile[]>();
@@ -309,6 +318,10 @@ export async function validateRepository(rootDir: string): Promise<ValidationSum
       const packaging = isRecord(file.document.packaging) ? file.document.packaging : undefined;
       if (license?.redistribution === "link-only" && packaging?.mode !== "link-only") addIssue(issues, file.path, "licença link-only exige packaging.mode link-only.");
       if (packaging?.mode === "registry-zip" && license?.redistribution !== "allowed") addIssue(issues, file.path, "registry-zip exige licença com redistribution allowed.");
+      if (packaging?.mode === "staged") {
+        if (license?.redistribution !== "allowed") addIssue(issues, file.path, "packaging.mode staged exige licença com redistribution allowed.");
+        if (!allowStaged) addIssue(issues, file.path, "packaging.mode staged é transitório e deve ser convertido antes de entrar em main.");
+      }
     }
   }
   for (const file of collectionVersions) {
