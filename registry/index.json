@@ -42,13 +42,13 @@
       "path": "projects/context7/resources/context7-plugins/resource.json",
       "kind": "resource",
       "id": "22222222-2222-4222-8222-222222222226",
-      "sha256": "ba1d2728465df9c098a53dbac724eff5be85302bb92035335d79722132f1651c"
+      "sha256": "2d941542ddfeebfc5e526b0a60af6f2dfb92983e4f157abda519f4f9d36a2f01"
     },
     {
       "path": "projects/context7/resources/context7-plugins/versions/22222222-2222-4222-8222-222222222229.json",
       "kind": "resource-version",
       "id": "22222222-2222-4222-8222-222222222229",
-      "sha256": "de0feaed7424dd2859d65d093cec81771646420792cbc0cbe51e473134349163"
+      "sha256": "f054c7645f94d724b2b9e13618973340cd6eede2f63282ceeff34ca56aaa493b"
     },
     {
       "path": "projects/matt-pocock-skills/collections/matt-pocock-skills-collection.json",
@@ -66,13 +66,13 @@
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/resource.json",
       "kind": "resource",
       "id": "11111111-1111-4111-8111-111111111114",
-      "sha256": "feb8f56616156ba9d63c72ab6d44c12b202444a4abc7f96ada7efce6cf2d16d8"
+      "sha256": "a0dad4de880aa46c03c43679c77ac13d425257ed24e111367d06c388ec37a8ba"
     },
     {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/versions/11111111-1111-4111-8111-111111111122.json",
       "kind": "resource-version",
       "id": "11111111-1111-4111-8111-111111111122",
-      "sha256": "569ba1a00f20f86a6761210b28fb0b3db55759ead822f46db49cc264c1369077"
+      "sha256": "5e05e42cda5ea857745d414115b2571a029ea906ed34fefb1683a9e5ffda83f6"
     },
     {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills/resource.json",
@@ -84,7 +84,7 @@
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills/versions/11111111-1111-4111-8111-111111111121.json",
       "kind": "resource-version",
       "id": "11111111-1111-4111-8111-111111111121",
-      "sha256": "841a4efdd902fc84a4e767e29fe9d3f3b5927e15bbfcc79c2d39f50bca72d3a6"
+      "sha256": "9082410c7a51f22f6598dd24e18cbb02babdd1a9cf0d2a7c6da93efe226dc395"
     },
     {
       "path": "projects/superpowers/collections/superpowers-tools.json",
@@ -108,7 +108,7 @@
       "path": "projects/superpowers/resources/superpowers-plugin/versions/33333333-3333-4333-8333-333333333337.json",
       "kind": "resource-version",
       "id": "33333333-3333-4333-8333-333333333337",
-      "sha256": "cf49076e90ef67cd10e238810035b10dc126715f23b7df5aeb070fc71a7f87cd"
+      "sha256": "2a4ddb00bc8f69bc75c70c5e6de4688a526de0f88d21c9c571337b9e4dfebfbb"
     },
     {
       "path": "projects/superpowers/resources/superpowers-skills/resource.json",

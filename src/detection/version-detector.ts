@@ -1,5 +1,5 @@
-import type { GitHubClient, GitHubRelease, GitHubTag, GitHubTree } from "../github/github-client.js";
-import { hashTreeEntries, type GitTreeEntry } from "./path-hash.js";
+import type { GitHubClient, GitHubRelease, GitHubTag, GitHubTree, NpmPackageMetadata } from "../github/github-client.js";
+import { hashTreeEntries, relativeTreePath, type GitTreeEntry } from "./path-hash.js";
 
 export type VersionStrategy = "github-release" | "git-tag" | "package-release" | "commit-path";
 export type CandidatePolicy = "stable" | "promoted" | "opt-in";
@@ -25,7 +25,7 @@ export interface DetectedVersion {
   changedFiles: string[];
 }
 
-function isExperimentalPath(filePath: string): boolean {
+export function isExperimentalPath(filePath: string): boolean {
   return /(^|\/)(experimental|deprecated|in-progress|wip)(\/|$)/i.test(filePath);
 }
 
@@ -35,6 +35,10 @@ function isStableRelease(release: GitHubRelease): boolean {
 
 function isStableTag(tag: GitHubTag): boolean {
   return !/(?:^|[-_.])(alpha|beta|canary|dev|experimental|nightly|next|rc|snapshot)(?:[-_.]|$)/i.test(tag.name) && !isExperimentalPath(tag.name);
+}
+
+function isStablePackageVersion(version: string): boolean {
+  return /^\d+\.\d+\.\d+(?:\+[0-9A-Za-z.-]+)?$/.test(version);
 }
 
 function versionSort(a: string, b: string): number {
@@ -69,55 +73,97 @@ function releaseSort(a: GitHubRelease, b: GitHubRelease): number {
 }
 
 function treeFromResponse(tree: GitHubTree): GitTreeEntry[] {
+  if (tree.truncated) throw new Error("GitHub retornou uma árvore truncada; o hash não pode ser calculado com segurança.");
   return tree.tree.filter((entry) => entry.type === "blob").map((entry) => ({ path: entry.path, sha: entry.sha, mode: entry.mode, type: "blob" as const }));
+}
+
+function candidateFilter(source: DetectionSource): (relativePath: string, entry: GitTreeEntry) => boolean {
+  return (relativePath) => isCandidateAllowed(relativePath, source.includeExperimental, source.candidatePolicy);
+}
+
+function changedFilesForSource(files: string[], source: DetectionSource): string[] {
+  return files
+    .map((filePath) => relativeTreePath(filePath, source.monitoredPath))
+    .filter((relativePath): relativePath is string => relativePath !== undefined && relativePath !== "" && isCandidateAllowed(relativePath, source.includeExperimental, source.candidatePolicy))
+    .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
 }
 
 export async function detectLatestVersion(client: GitHubClient, source: DetectionSource, previous?: DetectedVersion): Promise<DetectedVersion | null> {
   const { owner, repo } = githubParts(source.repositoryUrl);
   const now = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+  const filter = candidateFilter(source);
   const releaseCandidates = (await client.listReleases(owner, repo)).filter((release) => isStableRelease(release) && matchesTagPattern(release.tag_name, source.tagPattern)).sort(releaseSort);
   const tagCandidates = source.versionStrategy === "git-tag"
     ? (await client.listTags(owner, repo)).filter((tag) => isStableTag(tag) && matchesTagPattern(tag.name, source.tagPattern)).sort((a, b) => versionSort(a.name, b.name))
     : [];
 
+  const makeDetected = async (refValue: string, refType: "release" | "tag", label: string, upstreamPublishedAt: string, officialDownloadUrl: string): Promise<DetectedVersion | null> => {
+    const commitSha = await client.resolveRefCommit(owner, repo, refValue);
+    const tree = treeFromResponse(await client.getTree(owner, repo, commitSha));
+    const monitoredPathSha256 = hashTreeEntries(tree, source.monitoredPath, filter);
+    if (previous && previous.refValue === refValue && previous.commitSha === commitSha && previous.monitoredPathSha256 === monitoredPathSha256) return null;
+    let changedFiles: string[] = [];
+    if (previous && previous.commitSha !== commitSha) {
+      const comparison = await client.compareCommits(owner, repo, previous.commitSha, commitSha);
+      changedFiles = changedFilesForSource(comparison.files.map((file) => file.filename), source);
+    }
+    return { label, refType, refValue, commitSha, monitoredPathSha256, upstreamPublishedAt, officialDownloadUrl, changedFiles };
+  };
+
+  if (source.versionStrategy === "package-release" && source.packageName) {
+    let metadata: NpmPackageMetadata | undefined;
+    try {
+      metadata = await client.getNpmPackageMetadata(source.packageName);
+    } catch {
+      // A package registry outage must not erase or replace the existing recommendation;
+      // the GitHub release fallback below still detects known package tags.
+    }
+    if (metadata) {
+      const packageVersions = Object.keys(metadata.versions)
+        .filter((version) => isStablePackageVersion(version))
+        .sort(versionSort);
+      for (const version of packageVersions) {
+        const refValue = `${source.packageName}@${version}`;
+        if (!matchesTagPattern(refValue, source.tagPattern)) continue;
+        const detected = await makeDetected(refValue, "tag", version, metadata.time[version] ?? now, `https://www.npmjs.com/package/${encodeURIComponent(source.packageName)}/v/${encodeURIComponent(version)}`);
+        if (detected) return detected;
+        if (previous?.refValue === refValue) return null;
+      }
+    }
+  }
+
   if (source.versionStrategy !== "commit-path") {
     const candidate = source.versionStrategy === "git-tag" ? tagCandidates[0] : releaseCandidates[0];
     if (candidate) {
       const refValue = "tag_name" in candidate ? candidate.tag_name : candidate.name;
-      const commitSha = await client.resolveRefCommit(owner, repo, refValue);
-      const tree = treeFromResponse(await client.getTree(owner, repo, commitSha));
-      const monitoredPathSha256 = hashTreeEntries(tree, source.monitoredPath);
-      if (previous && previous.refValue === refValue && previous.commitSha === commitSha && previous.monitoredPathSha256 === monitoredPathSha256) return null;
-      return {
-        label: "tag_name" in candidate ? candidate.name || candidate.tag_name : candidate.name,
-        refType: source.versionStrategy === "git-tag" ? "tag" : "release",
+      return makeDetected(
         refValue,
-        commitSha,
-        monitoredPathSha256,
-        upstreamPublishedAt: "tag_name" in candidate ? candidate.published_at ?? candidate.created_at : now,
-        officialDownloadUrl: "tag_name" in candidate ? candidate.html_url : `${source.repositoryUrl}/tree/${encodeURIComponent(candidate.name)}`,
-        changedFiles: []
-      };
+        source.versionStrategy === "git-tag" ? "tag" : "release",
+        "tag_name" in candidate ? candidate.name || candidate.tag_name : candidate.name,
+        "tag_name" in candidate ? candidate.published_at ?? candidate.created_at : now,
+        "tag_name" in candidate ? candidate.html_url : `${source.repositoryUrl}/tree/${encodeURIComponent(candidate.name)}`
+      );
     }
   }
 
   const repository = await client.getRepository(owner, repo);
   const commitSha = await client.resolveRefCommit(owner, repo, repository.default_branch);
   const tree = treeFromResponse(await client.getTree(owner, repo, commitSha));
-  const monitoredPathSha256 = hashTreeEntries(tree, source.monitoredPath);
+  const monitoredPathSha256 = hashTreeEntries(tree, source.monitoredPath, filter);
   if (previous?.commitSha === commitSha && previous.monitoredPathSha256 === monitoredPathSha256) return null;
-  return {
-    label: commitSha.slice(0, 12),
-    refType: "commit",
-    refValue: commitSha,
-    commitSha,
-    monitoredPathSha256,
-    upstreamPublishedAt: now,
-    officialDownloadUrl: `${source.repositoryUrl}/tree/${commitSha}`,
-    changedFiles: []
-  };
+  let changedFiles: string[] = [];
+  if (previous && previous.commitSha !== commitSha) {
+    const comparison = await client.compareCommits(owner, repo, previous.commitSha, commitSha);
+    changedFiles = changedFilesForSource(comparison.files.map((file) => file.filename), source);
+  }
+  return { label: commitSha.slice(0, 12), refType: "commit", refValue: commitSha, commitSha, monitoredPathSha256, upstreamPublishedAt: now, officialDownloadUrl: `${source.repositoryUrl}/tree/${commitSha}`, changedFiles };
 }
 
-export function isCandidateAllowed(pathName: string, includeExperimental: boolean): boolean {
-  return includeExperimental || !isExperimentalPath(pathName);
+export function isCandidateAllowed(pathName: string, includeExperimental: boolean, candidatePolicy: CandidatePolicy = "stable"): boolean {
+  const normalized = pathName.replaceAll("\\", "/");
+  if (!includeExperimental && isExperimentalPath(normalized)) return false;
+  if (candidatePolicy === "opt-in" && !includeExperimental) return false;
+  if (candidatePolicy !== "promoted") return true;
+  const channel = normalized.split("/")[0]?.toLowerCase();
+  return channel === "engineering" || channel === "productivity" || channel === "promoted";
 }

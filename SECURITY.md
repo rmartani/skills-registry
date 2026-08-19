@@ -14,11 +14,11 @@ Este repositório é um catálogo e empacotador de dados. Nenhum arquivo baixado
 - geração de pacote;
 - workflow de Pull Request ou publicação.
 
-O CI usa `npm ci --ignore-scripts`. Workflows que publicam releases só rodam em `main` e não aceitam código de Pull Request para obter credenciais.
+O CI usa `npm ci --ignore-scripts`. Actions de checkout/setup-node são pinadas por SHA completo. Workflows que publicam releases só rodam em `main` e não aceitam código de Pull Request para obter credenciais.
 
 ## Validação de archives
 
-O packager rejeita caminhos absolutos, `..`, NUL, symlinks selecionados, devices/tipos especiais, duplicatas e limites excedidos (50 MiB ZIP, 200 MiB expandido, 20 MiB por arquivo, 10.000 arquivos e 240 caracteres por caminho). A licença/notice declarada é obrigatória quando a redistribuição é permitida. O `STANCATTI-REGISTRY.json` registra origem, ref, commit, caminho monitorado, licença e hash do payload.
+O packager rejeita caminhos absolutos, `..`, NUL, symlinks dentro do payload selecionado, devices/tipos especiais, duplicatas e limites excedidos (50 MiB ZIP, 200 MiB expandido, 20 MiB por arquivo, 10.000 arquivos e 240 caracteres por caminho). Symlinks fora do `monitoredPath` podem ser lidos apenas para validação de headers e nunca são copiados. A licença/notice declarada é obrigatória quando a redistribuição é permitida. O `STANCATTI-REGISTRY.json` registra origem, ref, commit, caminho monitorado, licença e hash do payload.
 
 ## Segredos e publicação
 

@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { GitHubClient } from "./github/github-client.js";
+import { isCandidateAllowed } from "./detection/version-detector.js";
 import { writeIndex } from "./index/build-index.js";
 import { readZipArchive } from "./package/archive-reader.js";
 import { buildDeterministicPackage } from "./package/package-builder.js";
@@ -37,17 +38,15 @@ function sourceParts(repositoryUrl: string): { owner: string; repo: string } {
   return { owner, repo };
 }
 
-function sourceEntries(entries: ArchiveEntry[], monitoredPath: string): ArchiveEntry[] {
+function sourceEntries(entries: ArchiveEntry[], monitoredPath: string, candidatePolicy: ResourceManifest["source"]["candidatePolicy"], includeExperimental: boolean): ArchiveEntry[] {
   const monitor = monitoredPath.replaceAll("\\", "/").replace(/^\.\//, "").replace(/\/$/, "") || ".";
   return entries
-    // Symlinks are never copied. The archive-level validator still checks their
-    // paths/limits, while the resulting package contains regular files only.
-    .filter((entry) => entry.type !== "directory" && entry.type !== "symlink")
+    .filter((entry) => entry.type !== "directory")
     .map((entry) => {
       const filePath = entry.path.replaceAll("\\", "/");
-      if (monitor === ".") return { ...entry, path: filePath };
-      const prefix = `${monitor}/`;
-      return filePath.startsWith(prefix) ? { ...entry, path: filePath.slice(prefix.length) } : undefined;
+      const relativePath = monitor === "." ? filePath : filePath.startsWith(`${monitor}/`) ? filePath.slice(monitor.length + 1) : undefined;
+      if (!relativePath || !isCandidateAllowed(relativePath, includeExperimental, candidatePolicy)) return undefined;
+      return { ...entry, path: relativePath };
     })
     .filter((entry): entry is ArchiveEntry => entry !== undefined && entry.path.length > 0);
 }
@@ -63,12 +62,12 @@ async function packageLive(outputDir: string): Promise<void> {
     }
     const { owner, repo } = sourceParts(resource.source.repositoryUrl);
     const archive = await client.downloadArchive(owner, repo, version.ref.value);
-    const rawEntries = readZipArchive(archive);
-    // Validate every archive path and expansion limit. A symlink outside the monitored
-    // path is not copied; a symlink inside the selected payload is rejected below.
-    validateArchiveEntries(rawEntries.map((entry) => entry.type === "symlink" ? { ...entry, type: "file" as const, mode: 0o100644 } : entry));
+    // Symlinks may exist outside the monitored payload (for example an upstream
+    // root AGENTS.md alias). Keep them as typed entries; the selected payload
+    // is validated strictly below and can never contain a symlink.
+    const rawEntries = readZipArchive(archive, { allowSymlinks: true });
     const entries = stripArchiveRoot(rawEntries);
-    const payloadEntries = sourceEntries(entries, resource.source.monitoredPath);
+    const payloadEntries = sourceEntries(entries, resource.source.monitoredPath, resource.source.candidatePolicy, resource.source.includeExperimental);
     if (payloadEntries.length === 0) throw new Error(`${resource.slug}: monitoredPath não produziu arquivos.`);
     const noticeEntries = entries.filter((entry) => resource.official.license.noticePaths.includes(entry.path));
     const selectedEntries = [...new Map([...payloadEntries, ...noticeEntries].map((entry) => [entry.path, entry] as const)).values()];

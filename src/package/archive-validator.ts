@@ -21,7 +21,7 @@ export const DEFAULT_ARCHIVE_LIMITS: ArchiveLimits = {
   maxPathLength: 240
 };
 
-export function validateArchiveEntries(entries: ArchiveEntry[], options: { limits?: Partial<ArchiveLimits>; requiredNoticePaths?: string[] } = {}): void {
+export function validateArchiveEntries(entries: ArchiveEntry[], options: { limits?: Partial<ArchiveLimits>; requiredNoticePaths?: string[]; allowSymlinks?: boolean } = {}): void {
   const limits = { ...DEFAULT_ARCHIVE_LIMITS, ...options.limits };
   if (entries.length > limits.maxFiles) throw new Error(`Arquivo excede o limite de ${limits.maxFiles} arquivos.`);
   const paths = new Set<string>();
@@ -37,8 +37,9 @@ export function validateArchiveEntries(entries: ArchiveEntry[], options: { limit
     paths.add(normalized);
     const mode = entry.mode ?? 0o100644;
     const fileType = mode & 0o170000;
-    if (entry.type === "symlink" || fileType === 0o120000) throw new Error(`Symlink não permitido: ${entry.path}`);
-    if (entry.type !== "directory" && fileType !== 0 && fileType !== 0o100000) throw new Error(`Tipo especial não permitido: ${entry.path}`);
+    const isSymlink = entry.type === "symlink" || fileType === 0o120000;
+    if (isSymlink && !options.allowSymlinks) throw new Error(`Symlink não permitido: ${entry.path}`);
+    if (!isSymlink && entry.type !== "directory" && fileType !== 0 && fileType !== 0o100000) throw new Error(`Tipo especial não permitido: ${entry.path}`);
     if (entry.type === "directory") continue;
     if (entry.data.byteLength > limits.maxFileBytes) throw new Error(`Arquivo excede ${limits.maxFileBytes} bytes: ${entry.path}`);
     expandedBytes += entry.data.byteLength;

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { zipSync } from "fflate";
 import { test } from "node:test";
 import { buildDeterministicPackage } from "../../src/package/package-builder.js";
 import { sha256 } from "../../src/package/checksum.js";
@@ -41,4 +42,10 @@ test("unsafe archive paths and filesystem types are rejected", () => {
 test("archive limits reject expansion and file-count abuse", () => {
   assert.throws(() => validateArchiveEntries([{ path: "large", data: new Uint8Array(5) }], { limits: { maxFileBytes: 4 } }));
   assert.throws(() => validateArchiveEntries([{ path: "one", data: new Uint8Array() }, { path: "two", data: new Uint8Array() }], { limits: { maxFiles: 1 } }));
+});
+
+test("ZIP expanded limits are checked before inflate", async () => {
+  const { readZipArchive } = await import("../../src/package/archive-reader.js");
+  const archive = zipSync({ "payload.txt": new Uint8Array(1024) });
+  assert.throws(() => readZipArchive(archive, { limits: { maxExpandedBytes: 100 } }), /expandido/);
 });

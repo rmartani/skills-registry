@@ -45,7 +45,7 @@ npm run index
 npm run package:dry-run
 ```
 
-`npm run index` é determinístico. O CI exige que o índice gerado não produza diff. `npm run package:dry-run -- --live` baixa apenas archives oficiais para reconstruir assets em `.generated/packages/`; valida caminhos, limites e notices e nunca executa arquivos upstream. O SHA do ZIP é distinto do `payload.sha256` dentro de `STANCATTI-REGISTRY.json`, pois um ZIP não pode conter seu próprio SHA sem autorreferência.
+`npm run index` é determinístico. O CI exige que o índice gerado não produza diff. `npm run package:dry-run -- --live` baixa apenas archives oficiais para reconstruir assets em `.generated/packages/`; valida caminhos, limites e notices antes do inflate e nunca executa arquivos upstream. O SHA do ZIP é distinto do `payload.sha256` dentro de `STANCATTI-REGISTRY.json`, pois um ZIP não pode conter seu próprio SHA sem autorreferência.
 
 Para resolver os seeds atuais sem alterar manifestos aprovados:
 

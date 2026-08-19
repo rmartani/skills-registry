@@ -303,6 +303,13 @@ export async function validateRepository(rootDir: string): Promise<ValidationSum
     }
     const basename = path.posix.basename(file.path, ".json");
     if (basename !== file.id) addIssue(issues, file.path, "nome do arquivo de versão deve ser o id canônico.");
+    if (resource) {
+      const official = isRecord(resource.document.official) ? resource.document.official : undefined;
+      const license = official && isRecord(official.license) ? official.license : undefined;
+      const packaging = isRecord(file.document.packaging) ? file.document.packaging : undefined;
+      if (license?.redistribution === "link-only" && packaging?.mode !== "link-only") addIssue(issues, file.path, "licença link-only exige packaging.mode link-only.");
+      if (packaging?.mode === "registry-zip" && license?.redistribution !== "allowed") addIssue(issues, file.path, "registry-zip exige licença com redistribution allowed.");
+    }
   }
   for (const file of collectionVersions) {
     const collectionId = stringValue(file.document.collectionId);

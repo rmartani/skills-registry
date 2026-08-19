@@ -20,7 +20,7 @@
     "notesPtBr": "Algumas variantes são wrappers do serviço remoto e não substituem o backend hospedado.",
     "tags": ["context7", "plugin", "cursor", "opencode"]
   },
-  "source": { "repositoryUrl": "https://github.com/upstash/context7", "monitoredPath": "plugins", "versionStrategy": "package-release", "packageName": "@upstash/context7-opencode", "tagPattern": "^@upstash/context7-opencode@", "candidatePolicy": "stable", "includeExperimental": false },
+  "source": { "repositoryUrl": "https://github.com/upstash/context7", "monitoredPath": "packages/opencode", "versionStrategy": "package-release", "packageName": "@upstash/context7-opencode", "tagPattern": "^@upstash/context7-opencode@", "candidatePolicy": "stable", "includeExperimental": false },
   "installationVariants": [
     { "key": "cursor", "target": "cursor", "label": "Cursor", "kind": "steps", "command": null, "url": null, "steps": ["Adicione o plugin Context7 pelo marketplace do Cursor.", "Siga a configuração OAuth oficial do MCP Context7."], "warningPtBr": "A variante usa o serviço MCP remoto oficial.", "officialSourceUrl": "https://github.com/upstash/context7/tree/master/plugins/cursor/context7" },
     { "key": "setup", "target": "generic", "label": "Setup por harness", "kind": "command", "command": "npx ctx7 setup", "url": null, "steps": null, "warningPtBr": null, "officialSourceUrl": "https://context7.com/docs/clients/cli" }

@@ -30,6 +30,16 @@ export interface GitHubTree {
   tree: Array<{ path: string; mode: string; type: "blob" | "tree" | "commit"; sha: string; size?: number; url?: string }>;
 }
 
+export interface GitHubComparison {
+  files: Array<{ filename: string; status: string; additions?: number; deletions?: number; changes?: number }>;
+}
+
+export interface NpmPackageMetadata {
+  name: string;
+  versions: Record<string, Record<string, unknown>>;
+  time: Record<string, string>;
+}
+
 export interface GitHubContent {
   path: string;
   type: "file" | "dir";
@@ -85,6 +95,19 @@ export class GitHubClient {
 
   async getTree(owner: string, repo: string, ref: string): Promise<GitHubTree> {
     return this.request<GitHubTree>(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/git/trees/${encodeURIComponent(ref)}?recursive=1`);
+  }
+
+  async compareCommits(owner: string, repo: string, base: string, head: string): Promise<GitHubComparison> {
+    return this.request<GitHubComparison>(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/compare/${encodeURIComponent(base)}...${encodeURIComponent(head)}`);
+  }
+
+  async getNpmPackageMetadata(packageName: string): Promise<NpmPackageMetadata> {
+    const response = await fetch(`https://registry.npmjs.org/${encodeURIComponent(packageName)}`, {
+      headers: { Accept: "application/json", "User-Agent": "stancatti-skills-registry/0.1" },
+      signal: AbortSignal.timeout(30_000)
+    });
+    if (!response.ok) throw new Error(`npm registry respondeu ${response.status}.`);
+    return (await response.json()) as NpmPackageMetadata;
   }
 
   async getContent(owner: string, repo: string, contentPath: string, ref?: string): Promise<GitHubContent> {

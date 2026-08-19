@@ -3,6 +3,7 @@ import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { writeIndex } from "../../src/index/build-index.js";
 import { createSchemaValidators, RegistryValidationError, validateRepository } from "../../src/schema/validate.js";
 
 const rootDir = path.resolve(process.cwd());
@@ -42,6 +43,21 @@ test("additional properties are rejected", async () => {
   resource.unexpected = true;
   const validator = validators.get("resource")!;
   assert.equal(validator(resource), false);
+});
+
+test("link-only licenses cannot publish registry ZIPs", async () => {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), "skills-registry-license-"));
+  try {
+    await cp(rootDir, temporary, { recursive: true, filter: (source) => !source.includes(`${path.sep}node_modules${path.sep}`) && !source.endsWith(`${path.sep}dist`) });
+    const resourcePath = path.join(temporary, "registry/projects/context7/resources/context7-mcp/resource.json");
+    const resource = JSON.parse((await readFile(resourcePath)).toString("utf8")) as Record<string, any>;
+    resource.official.license.redistribution = "link-only";
+    await writeFile(resourcePath, `${JSON.stringify(resource, null, 2)}\n`);
+    await writeIndex(temporary);
+    await assert.rejects(() => validateRepository(temporary), /licença link-only/);
+  } finally {
+    await rm(temporary, { recursive: true, force: true });
+  }
 });
 
 test("orphan references and redirect cycles fail repository validation", async () => {

@@ -41,9 +41,9 @@ Detecção não muda `recommendedVersionId`. Aprovação cria uma PR; somente me
 
 ## Versionamento e detecção
 
-`source.versionStrategy` pode ser `github-release`, `git-tag`, `package-release` ou `commit-path`; `candidatePolicy` pode ser `stable`, `promoted` ou `opt-in`. Releases draft/prerelease e paths `experimental`, `deprecated`, `in-progress` ou `wip` ficam fora por padrão.
+`source.versionStrategy` pode ser `github-release`, `git-tag`, `package-release` ou `commit-path`; `candidatePolicy` pode ser `stable`, `promoted` ou `opt-in`. Releases draft/prerelease e paths `experimental`, `deprecated`, `in-progress` ou `wip` ficam fora por padrão. A política `promoted` também limita o caminho relativo aos canais `engineering`, `productivity` ou `promoted`; `opt-in` permanece inativo até `includeExperimental: true`; `includeExperimental: true` é a única forma de incluir canais experimentais. A estratégia `package-release` consulta o metadata npm e resolve a versão para o tag upstream correspondente.
 
-Quando não há release apropriada, o detector usa commit e hash do caminho monitorado. O hash é SHA-256 da sequência ordenada:
+Quando não há release apropriada, o detector usa commit e hash do caminho monitorado. Árvores GitHub truncadas falham fechadas, nunca geram hash parcial. Quando há uma versão anterior, `changedFiles` vem do compare de commits e é filtrado pelo mesmo monitored path/policy. O hash é SHA-256 da sequência ordenada:
 
 ```text
 relativePath + NUL + blobSha + NUL + gitMode
@@ -67,7 +67,7 @@ Limites default:
 | arquivos | 10.000 |
 | caminho | 240 caracteres |
 
-`redistribution: allowed` exige todos os `noticePaths` no pacote. `link-only` nunca gera ZIP e mantém o link oficial. Licenças MIT dos seeds permitem redistribuição do código com avisos, mas não de marcas ou serviços hospedados.
+`redistribution: allowed` exige todos os `noticePaths` no pacote. `link-only` nunca gera ZIP e mantém o link oficial; também pode ser usado por uma política de segurança quando o archive upstream não pode ser empacotado sem symlinks. Um manifesto com licença `link-only` nunca pode declarar `registry-zip`. Licenças MIT dos seeds permitem redistribuição do código com avisos, mas não de marcas ou serviços hospedados.
 
 ## Seeds oficiais
 
@@ -83,7 +83,7 @@ Limites default:
 
 ### Validação
 
-`validate.yml` usa permissões `contents: read`, `npm ci --ignore-scripts`, build, testes, validação, regeneração do índice e `package:dry-run` local. Pull Requests nunca recebem token de publicação.
+`validate.yml` usa permissões `contents: read`, `npm ci --ignore-scripts`, build, testes, validação, regeneração do índice e reconstrói os ZIPs aprovados com `package:dry-run --live` usando somente archives oficiais. O packager aplica limites antes do inflate e nunca executa conteúdo upstream. Pull Requests nunca recebem token de publicação.
 
 ### Sync diário/manual
 

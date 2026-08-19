@@ -20,7 +20,7 @@
     "notesPtBr": "Use o plugin ou a cópia via Skills CLI, nunca os dois ao mesmo tempo.",
     "tags": ["plugin", "claude-code", "skills"]
   },
-  "source": { "repositoryUrl": "https://github.com/mattpocock/skills", "monitoredPath": ".", "versionStrategy": "github-release", "packageName": "mattpocock-skills", "tagPattern": "^v\\d+\\.\\d+\\.\\d+$", "candidatePolicy": "promoted", "includeExperimental": false },
+  "source": { "repositoryUrl": "https://github.com/mattpocock/skills", "monitoredPath": ".", "versionStrategy": "github-release", "packageName": "mattpocock-skills", "tagPattern": "^v\\d+\\.\\d+\\.\\d+$", "candidatePolicy": "stable", "includeExperimental": false },
   "installationVariants": [
     { "key": "claude-marketplace", "target": "claude-code", "label": "Claude Code Marketplace", "kind": "command", "command": "claude plugins install mattpocock-skills", "url": null, "steps": null, "warningPtBr": "Não instale também a variante Skills CLI neste mesmo ambiente.", "officialSourceUrl": "https://claude.com/plugins/mattpocock-skills" },
     { "key": "plugin-command", "target": "claude-code", "label": "Comando do plugin", "kind": "command", "command": "/plugin install mattpocock-skills", "url": null, "steps": null, "warningPtBr": null, "officialSourceUrl": "https://github.com/mattpocock/skills" }
