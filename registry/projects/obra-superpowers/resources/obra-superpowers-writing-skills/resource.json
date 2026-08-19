@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource",
+  "id": "66f2068b-65f5-47ed-818a-119279f2017c",
+  "projectId": "f5a75356-8765-4191-a05e-5d28f4d71a46",
+  "collectionId": "390ef641-29f7-4d9f-ab95-fd87e20cc132",
+  "slug": "obra-superpowers-writing-skills",
+  "type": "skill",
+  "publication": {
+    "status": "active",
+    "publishedAt": "2026-08-19T07:04:41Z",
+    "archivedAt": null
+  },
+  "official": {
+    "name": "writing-skills",
+    "description": "---\nname: writing-skills\ndescription: Use when creating new skills, editing existing skills, or verifying skills work before deployment\n---\n\n# Writing Skills\n\n## Overview\n\n**Writing skills IS Test-Driven Development applied to process documentation.**\n\n**Personal skills live in your runtime's skills directory** (`~/.claude/skills/` on Claude Code) — see [codex-tools.md](../using-superpowers/references/codex-tools.md) or [gemini-tools.md](../using-superpowers/references/gemini-tools.md) for the path on those runtimes. Codex, Copilot CLI, and Gemini CLI all also recognize `~/.agents/skills/` as a cross-runtime alias.\n\nYou write test cases (pressure scenarios with subagents), watch them fail (baseline behavior), write the skill (documentation), watch tests pass (agents comply), and refactor (close loopholes).\n\n**Core principle:** If you didn't watch an agent fail without the skill, you don't know if the skill teaches the right thing.\n\n**REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill. That skill defines the fundamental RED-GREEN-REFACTOR cycle. This skill adapts TDD to documentation.\n\n**Official guidance:** For Anthropic's official skill authoring best practices, see anthropic-best-practices.md. This document provides additional patterns and guidelines that complement the TDD-focused approach in this skill.\n\n## What is a Skill?\n\nA **skill** is a reference guide for proven techniques, patterns, or tools. Skills help future agents find and apply effective approaches.\n\n**Skills are:** Reusable techniques, patterns, tools, reference guides\n\n**Skills are NOT:** Narratives about how you solved a problem once\n\n## TDD Mapping for Skills\n\n| TDD Concept | Skill Creation |\n|-------------|----------------|\n| **Test case** | Pressure scenario with subagent |\n| **Production code** | Skill document (SKILL.md) |\n| **Test fails (RED)** | Agent violates rule without skill (baseline) |\n| **Test passes (GREEN)** | Agent complies with skill present |\n| **Refactor** | Close loopholes while maintaining compliance |\n| **Write test first** | Run baseline scenario BEFORE writing skill |\n| **Watch it fail** | Document exact rationalizations agent uses |\n| **Minimal code** | Write skill addressing those specific violations |\n| **Watch it pass** | Verify agent now complies |\n| **Refactor cycle** | Find new rationalizations → plug → re-verify |\n\nThe entire skill creation process follows RED-GREEN-REFACTOR.\n\n## When to Create a Skill\n\n**Create when:**\n- Technique wasn't intuitively obvious to you\n- You'd reference this again across projects\n- Pattern applies broadly (not project-specific)\n- Others would benefit\n\n**Don't create for:**\n- One-off solutions\n- Standard practices well-documented elsewhere\n- Project-specific conventions (put in your instructions file)\n- Mechanical constraints (if it's enforceable with regex/validation, automate it—save documentation for judgment calls)\n\n## Skill Types\n\n### Technique\nConcrete method with steps to follow (condition-based-waiting, root-cause-tracing)\n\n### Pattern\nWay of thinking about problems (flatten-with-flags, test-invariants)\n\n### Reference\nAPI docs, syntax guides, tool documentation (office docs)\n\n## Directory Structure\n\n\n```\nskills/\n  skill-name/\n    SKILL.md              # Main reference (required)\n    supporting-file.*     # Only if needed\n```\n\n**Flat namespace** - all skills in one searchable namespace\n\n**Separate files for:**\n1. **Heavy reference** (100+ lines) - API docs, comprehensive syntax\n2. **Reusable tools** - Scripts, utilities, templates\n\n**Keep inline:**\n- Principles and concepts\n- Code patterns (< 50 lines)\n- Everything else\n\n## SKILL.md Structure\n\n**Frontmatter (YAML):**\n- Two required fields: `name` and `description` (see [agentskills.io/specification](https://agentskills.io/specification) for all supported fields)\n- Max 1024 characters total\n- `name`: Use letters, numbers, and hyphens only (no parentheses, special chars)\n- `description`: Third-person, describes ONLY when to use (NOT what it does)\n  - Start with \"Use when...\" to focus on triggering conditions\n  - Include specific symptoms, situations, and contexts\n  - **NEVER summarize the skill's process or workflow** (see SDO section for why)\n  - Keep under 500 characters if possible\n\n```markdown\n---\nname: Skill-Name-With-Hyphens\ndescription: Use when [specific triggering conditions and symptoms]\n---\n\n# Skill Name\n\n## Overview\nWhat is this? Core principle in 1-2 sentences.\n\n## When to Use\n[Small inline flowchart IF decision non-obvious]\n\nBullet list with SYMPTOMS and use cases\nWhen NOT to use\n\n## Core Pattern (for techniques/patterns)\nBefore/after code comparison\n\n## Quick Reference\nTable or bullets for scanning common operations\n\n## Implementation\nInline code for simple patterns\nLink to file for heavy reference or reusable tools\n\n## Common Mistakes\nWhat goes wrong + fixes\n\n## Real-World Impact (optional)\nConcrete results\n```\n\n\n## Skill Discovery Optimization (SDO)\n\n**Critical for discovery:** Future agents need to FIND your skill\n\n### 1. Rich Description Field\n\n**Purpose:** Your agent reads the description to decide which skills to load for a given task. Make it answer: \"Should I read this skill right now?\"\n\n**Format:** Start with \"Use when...\" to focus on triggering conditions\n\n**CRITICAL: Description = When to Use, NOT What the Skill Does**\n\nThe description should ONLY describe triggering conditions. Do NOT summarize the skill's process or workflow in the description.\n\n**Why this matters:** Testing revealed that when a description summarizes the skill's workflow, an agent may follow the description instead of reading the full skill content. A description saying \"code review between tasks\" caused an agent to do ONE review, even though the skill's flowchart clearly showed TWO reviews (spec compliance then code quality).\n\nWhen the description was changed to just \"Use when executing implementation plans with independent tasks\" (no workflow summary), the agent correctly read the flowchart and followed the two-stage review process.\n\n**The trap:** Descriptions that summarize workflow create a shortcut agents will take. The skill body becomes documentation agents skip.\n\n```yaml\n# ❌ BAD: Summarizes workflow - agents may follow this instead of reading skill\ndescription: Use when executing plans - dispatches subagent per task with code review between tasks\n\n# ❌ BAD: Too much process detail\ndescription: Use for TDD - write test first, watch it fail, write minimal code, refactor\n\n# ✅ GOOD: Just triggering conditions, no workflow summary\ndescription: Use when executing implementation plans with independent tasks in the current session\n\n# ✅ GOOD: Triggering conditions only\ndescription: Use when implementing any feature or bugfix, before writing implementation code\n```\n\n**Content:**\n- Use concrete triggers, symptoms, and situations that signal this skill applies\n- Describe the *problem* (race conditions, inconsistent behavior) not *language-specific symptoms* (setTimeout, sleep)\n- Keep triggers technology-agnostic unless the skill itself is technology-specific\n- If skill is technology-specific, make that explicit in the trigger\n- Write in third person (injected into system prompt)\n- **NEVER summarize the skill's process or workflow**\n\n```yaml\n# ❌ BAD: Too abstract, vague, doesn't include when to use\ndescription: For async testing\n\n# ❌ BAD: First person\ndescription: I can help you with async tests when they're flaky\n\n# ❌ BAD: Mentions technology but skill isn't specific to it\ndescription: Use when tests use setTimeout/sleep and are flaky\n\n# ✅ GOOD: Starts with \"Use when\", describes problem, no workflow\ndescription: Use when tests have race conditions, timing dependencies, or pass/fail inconsistently\n\n# ✅ GOOD: Technology-specific skill with explicit trigger\ndescription: Use when using React Router and handling authentication redirects\n```\n\n### 2. Keyword Coverage\n\nUse words an agent would search for:\n- Error messages: \"Hook timed out\", \"ENOTEMPTY\", \"race condition\"\n- Symptoms: \"flaky\", \"hanging\", \"zombie\", \"pollution\"\n- Synonyms: \"timeout/hang/freeze\", \"cleanup/teardown/afterEach\"\n- Tools: Actual commands, library names, file types\n\n### 3. Descriptive Naming\n\n**Use active voice, verb-first:**\n- ✅ `creating-skills` not `skill-creation`\n- ✅ `condition-based-waiting` not `async-test-helpers`\n\n### 4. Token Efficiency (Critical)\n\n**Problem:** getting-started and frequently-referenced skills load into EVERY conversation. Every token counts.\n\n**Target word counts:**\n- getting-started workflows: <150 words each\n- Frequently-loaded skills: <200 words total\n- Other skills: <500 words (still be concise)\n\n**Techniques:**\n\n**Move details to tool help:**\n```bash\n# ❌ BAD: Document all flags in SKILL.md\nsearch-conversations supports --text, --both, --after DATE, --before DATE, --limit N\n\n# ✅ GOOD: Reference --help\nsearch-conversations supports multiple modes and filters. Run --help for details.\n```\n\n**Use cross-references:**\n```markdown\n# ❌ BAD: Repeat workflow details\nWhen searching, dispatch subagent with template...\n[20 lines of repeated instructions]\n\n# ✅ GOOD: Reference other skill\nAlways use subagents (50-100x context savings). REQUIRED: Use [other-skill-name] for workflow.\n```\n\n**Compress examples:**\n```markdown\n# ❌ BAD: Verbose example (42 words)\nyour human partner: \"How did we handle authentication errors in React Router before?\"\nYou: I'll search past conversations for React Router authentication patterns.\n[Dispatch subagent with search query: \"React Router authentication error handling 401\"]\n\n# ✅ GOOD: Minimal example (20 words)\nPartner: \"How did we handle auth errors in React Router?\"\nYou: Searching...\n[Dispatch subagent → synthesis]\n```\n\n**Eliminate redundancy:**\n- Don't repeat what's in cross-referenced skills\n- Don't explain what's obvious from command\n- Don't include multiple examples of same pattern\n\n**Verification:**\n```bash\nwc -w skills/path/SKILL.md\n# getting-started workflows: ai...",
+    "homepageUrl": "https://github.com/obra/superpowers",
+    "repositoryUrl": "https://github.com/obra/superpowers",
+    "maintainer": {
+      "name": "writing-skills",
+      "url": "https://github.com/obra/superpowers"
+    },
+    "license": {
+      "spdx": "MIT",
+      "name": "MIT License",
+      "url": "https://github.com/obra/superpowers/blob/main/LICENSE",
+      "redistribution": "allowed",
+      "noticePaths": [
+        "LICENSE"
+      ]
+    }
+  },
+  "editorial": {
+    "descriptionPtBr": "writing-skills",
+    "notesPtBr": null,
+    "tags": [
+      "skill"
+    ]
+  },
+  "source": {
+    "repositoryUrl": "https://github.com/obra/superpowers",
+    "monitoredPath": "skills/writing-skills/SKILL.md",
+    "versionStrategy": "commit-path",
+    "packageName": null,
+    "tagPattern": null,
+    "candidatePolicy": "stable",
+    "includeExperimental": false
+  },
+  "installationVariants": [
+    {
+      "key": "official",
+      "target": "generic",
+      "label": "Official installation",
+      "kind": "steps",
+      "command": null,
+      "url": null,
+      "steps": [
+        "Consulte a documentação oficial para instalar este recurso."
+      ],
+      "warningPtBr": null,
+      "officialSourceUrl": "https://github.com/obra/superpowers"
+    }
+  ],
+  "recommendedVersionId": "eead6a1a-de58-4484-8802-b57935765056"
+}
