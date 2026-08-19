@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "catalog-proposal",
+  "id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+  "sourceUrl": "https://github.com/example/project",
+  "status": "partial",
+  "deterministicFindings": { "manifestPaths": ["README.md"] },
+  "draftProjectId": null,
+  "draftCollectionIds": [],
+  "draftResourceIds": [],
+  "fields": {
+    "descriptionPtBr": {
+      "value": "Proposta editável.",
+      "confidence": 0.5,
+      "sources": [{ "url": "https://github.com/example/project", "path": "README.md", "excerpt": "Example" }],
+      "warnings": ["Revisão humana necessária."]
+    }
+  },
+  "globalWarnings": ["Proposta nunca publica automaticamente."],
+  "geminiAvailable": false
+}

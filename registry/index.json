@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "registry-index",
+  "entries": [
+    {
+      "path": "projects/context7/collections/context7-tools.json",
+      "kind": "collection",
+      "id": "22222222-2222-4222-8222-222222222223",
+      "sha256": "fffba76908fcb4311af6fe7bc7bbf735de219aea115f4e2d8f6628f063537cd1"
+    },
+    {
+      "path": "projects/context7/project.json",
+      "kind": "project",
+      "id": "22222222-2222-4222-8222-222222222222",
+      "sha256": "acd710b317b34977479a8ddc5663d0bb3f35e9b06c956d163a921fef02fdf29a"
+    },
+    {
+      "path": "projects/context7/resources/context7-cli-skills/resource.json",
+      "kind": "resource",
+      "id": "22222222-2222-4222-8222-222222222225",
+      "sha256": "1efaa272bf0c8bdd6e0788b0de1d149f7a1e7f34a6723a8036ae84e4df037f10"
+    },
+    {
+      "path": "projects/context7/resources/context7-cli-skills/versions/22222222-2222-4222-8222-222222222228.json",
+      "kind": "resource-version",
+      "id": "22222222-2222-4222-8222-222222222228",
+      "sha256": "c5aa27b58b66dc68f440919aadd7bade1f1e03d1e4cdf26a71d6c3391e6ea9e9"
+    },
+    {
+      "path": "projects/context7/resources/context7-mcp/resource.json",
+      "kind": "resource",
+      "id": "22222222-2222-4222-8222-222222222224",
+      "sha256": "557484c7b036ca9bf17ad40fd78ab6bcad46aeb61150a5b19e24d99939d53b87"
+    },
+    {
+      "path": "projects/context7/resources/context7-mcp/versions/22222222-2222-4222-8222-222222222227.json",
+      "kind": "resource-version",
+      "id": "22222222-2222-4222-8222-222222222227",
+      "sha256": "ff53d91d1aa0845d6234814394e68cb4361cd8eb7900c4f02f2bd5b2db7431b1"
+    },
+    {
+      "path": "projects/context7/resources/context7-plugins/resource.json",
+      "kind": "resource",
+      "id": "22222222-2222-4222-8222-222222222226",
+      "sha256": "ba1d2728465df9c098a53dbac724eff5be85302bb92035335d79722132f1651c"
+    },
+    {
+      "path": "projects/context7/resources/context7-plugins/versions/22222222-2222-4222-8222-222222222229.json",
+      "kind": "resource-version",
+      "id": "22222222-2222-4222-8222-222222222229",
+      "sha256": "de0feaed7424dd2859d65d093cec81771646420792cbc0cbe51e473134349163"
+    },
+    {
+      "path": "projects/matt-pocock-skills/collections/matt-pocock-skills-collection.json",
+      "kind": "collection",
+      "id": "11111111-1111-4111-8111-111111111112",
+      "sha256": "f97ec1fbde9255f5f49d86e203916582bb9a702d5d19fd65d5c3b4924eabfda6"
+    },
+    {
+      "path": "projects/matt-pocock-skills/project.json",
+      "kind": "project",
+      "id": "11111111-1111-4111-8111-111111111111",
+      "sha256": "8f286bbc82331662c0c8842a31898a31e8ede5424da4cd3504eaebb404df21c1"
+    },
+    {
+      "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/resource.json",
+      "kind": "resource",
+      "id": "11111111-1111-4111-8111-111111111114",
+      "sha256": "feb8f56616156ba9d63c72ab6d44c12b202444a4abc7f96ada7efce6cf2d16d8"
+    },
+    {
+      "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/versions/11111111-1111-4111-8111-111111111122.json",
+      "kind": "resource-version",
+      "id": "11111111-1111-4111-8111-111111111122",
+      "sha256": "569ba1a00f20f86a6761210b28fb0b3db55759ead822f46db49cc264c1369077"
+    },
+    {
+      "path": "projects/matt-pocock-skills/resources/mattpocock-skills/resource.json",
+      "kind": "resource",
+      "id": "11111111-1111-4111-8111-111111111113",
+      "sha256": "eec66d1181ff237b73bab53ed17d8b76e420d3b25270960a96038e89edc9b613"
+    },
+    {
+      "path": "projects/matt-pocock-skills/resources/mattpocock-skills/versions/11111111-1111-4111-8111-111111111121.json",
+      "kind": "resource-version",
+      "id": "11111111-1111-4111-8111-111111111121",
+      "sha256": "841a4efdd902fc84a4e767e29fe9d3f3b5927e15bbfcc79c2d39f50bca72d3a6"
+    },
+    {
+      "path": "projects/superpowers/collections/superpowers-tools.json",
+      "kind": "collection",
+      "id": "33333333-3333-4333-8333-333333333334",
+      "sha256": "4b45ea4a8b3147cace36f2d181de8474ceaf3405c991313cd00e50e49461efee"
+    },
+    {
+      "path": "projects/superpowers/project.json",
+      "kind": "project",
+      "id": "33333333-3333-4333-8333-333333333333",
+      "sha256": "77e4afb26ba9289b3a06f5f59d6487afc25b154058a73bd981bc76c0580188c8"
+    },
+    {
+      "path": "projects/superpowers/resources/superpowers-plugin/resource.json",
+      "kind": "resource",
+      "id": "33333333-3333-4333-8333-333333333335",
+      "sha256": "64ab63243b9ec945d331e45131886774c909396cc42cdd470f34a5deb3ddc9b7"
+    },
+    {
+      "path": "projects/superpowers/resources/superpowers-plugin/versions/33333333-3333-4333-8333-333333333337.json",
+      "kind": "resource-version",
+      "id": "33333333-3333-4333-8333-333333333337",
+      "sha256": "cf49076e90ef67cd10e238810035b10dc126715f23b7df5aeb070fc71a7f87cd"
+    },
+    {
+      "path": "projects/superpowers/resources/superpowers-skills/resource.json",
+      "kind": "resource",
+      "id": "33333333-3333-4333-8333-333333333336",
+      "sha256": "f9acd3082144f5d1490775f05b36cc0a02bf50e4ef39725a52580e2456ec208b"
+    },
+    {
+      "path": "projects/superpowers/resources/superpowers-skills/versions/33333333-3333-4333-8333-333333333338.json",
+      "kind": "resource-version",
+      "id": "33333333-3333-4333-8333-333333333338",
+      "sha256": "be8e2f4c6f2b43e302d560fde0c111a22870476d7c96d24e5d5e5f1eebfdbc6b"
+    }
+  ]
+}

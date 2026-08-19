@@ -1,0 +1,5 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "registry-index",
+  "entries": [{ "path": "projects/example-project/project.json", "kind": "project", "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", "sha256": "0000000000000000000000000000000000000000000000000000000000000000" }]
+}

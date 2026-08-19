@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.stancatti.dev/schemas/catalog-proposal.schema.json",
+  "title": "Skills Registry catalog proposal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "kind", "id", "sourceUrl", "status", "deterministicFindings", "draftProjectId", "draftCollectionIds", "draftResourceIds", "fields", "globalWarnings", "geminiAvailable"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "kind": { "const": "catalog-proposal" },
+    "id": { "$ref": "#/$defs/uuid" },
+    "sourceUrl": { "$ref": "#/$defs/httpsUrl" },
+    "status": { "enum": ["processing", "ready", "partial", "failed"] },
+    "deterministicFindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "manifestPaths": { "type": "array", "items": { "type": "string", "maxLength": 240 }, "maxItems": 500 },
+        "skillDirectories": { "type": "array", "items": { "type": "string", "maxLength": 240 }, "maxItems": 500 },
+        "pluginManifestPaths": { "type": "array", "items": { "type": "string", "maxLength": 240 }, "maxItems": 100 },
+        "packageManifestPaths": { "type": "array", "items": { "type": "string", "maxLength": 240 }, "maxItems": 100 },
+        "warnings": { "type": "array", "items": { "type": "string", "maxLength": 2000 }, "maxItems": 50 }
+      }
+    },
+    "draftProjectId": { "anyOf": [{ "$ref": "#/$defs/uuid" }, { "type": "null" }] },
+    "draftCollectionIds": { "type": "array", "items": { "$ref": "#/$defs/uuid" }, "uniqueItems": true },
+    "draftResourceIds": { "type": "array", "items": { "$ref": "#/$defs/uuid" }, "uniqueItems": true },
+    "fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "officialName": { "$ref": "#/$defs/proposalField" },
+        "descriptionPtBr": { "$ref": "#/$defs/proposalField" },
+        "notesPtBr": { "$ref": "#/$defs/proposalField" },
+        "tags": { "$ref": "#/$defs/proposalField" },
+        "type": { "$ref": "#/$defs/proposalField" },
+        "homepageUrl": { "$ref": "#/$defs/proposalField" },
+        "installationVariants": { "$ref": "#/$defs/proposalField" }
+      }
+    },
+    "globalWarnings": { "type": "array", "items": { "type": "string", "maxLength": 2000 }, "maxItems": 50 },
+    "geminiAvailable": { "type": "boolean" }
+  },
+  "$defs": {
+    "uuid": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$" },
+    "httpsUrl": { "type": "string", "pattern": "^https://[^\\s]+$", "maxLength": 2048 },
+    "proposalField": {
+      "type": "object", "additionalProperties": false, "required": ["value", "confidence", "sources", "warnings"],
+      "properties": {
+        "value": {},
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "sources": {
+          "type": "array", "maxItems": 20,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["url", "path", "excerpt"],
+            "properties": { "url": { "$ref": "#/$defs/httpsUrl" }, "path": { "type": "string", "minLength": 1, "maxLength": 240 }, "excerpt": { "type": "string", "maxLength": 12000 } }
+          }
+        },
+        "warnings": { "type": "array", "items": { "type": "string", "maxLength": 2000 }, "maxItems": 20 }
+      }
+    }
+  }
+}

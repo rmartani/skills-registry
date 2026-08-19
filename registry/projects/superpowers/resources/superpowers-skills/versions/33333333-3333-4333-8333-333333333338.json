@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "33333333-3333-4333-8333-333333333338",
+  "resourceId": "33333333-3333-4333-8333-333333333336",
+  "label": "6.3.0",
+  "ref": { "type": "release", "value": "v6.3.0", "commitSha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797" },
+  "monitoredPathSha256": "7229aa496ec817486ef8e31f60911b4152ed89eddb013364f767d33e36634ba0",
+  "upstreamPublishedAt": "2026-08-12T16:58:30Z",
+  "approvedAt": "2026-08-19T00:00:00Z",
+  "officialDownloadUrl": "https://github.com/obra/superpowers/releases/tag/v6.3.0",
+  "packaging": { "mode": "registry-zip", "packagedAt": "2026-08-19T00:00:00Z", "artifactFileName": "superpowers-skills-6.3.0.zip", "artifactSha256": "176b1cd0a3ce49d931104ad135c1e1b46150a64fd0e248ba2e14fddfd14d4b39", "payloadSha256": "74ae27eddc63ed46a9d56d9a2e42009031363b23bce4ac4aae3b9c04ab611d90", "sizeBytes": 158292, "githubReleaseTag": "resource/superpowers-skills/6.3.0" }
+}

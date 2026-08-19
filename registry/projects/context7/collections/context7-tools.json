@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "collection",
+  "id": "22222222-2222-4222-8222-222222222223",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "slug": "context7-tools",
+  "officialName": "Context7 Tools",
+  "editorial": {
+    "descriptionPtBr": "Ferramentas Context7 separadas por fluxo de versão: MCP, CLI/skills e plugins.",
+    "notesPtBr": "O corpus e o backend hospedados não são copiados; este catálogo aponta para os serviços oficiais.",
+    "tags": ["context7", "mcp", "documentacao"]
+  },
+  "resourceIds": ["22222222-2222-4222-8222-222222222224", "22222222-2222-4222-8222-222222222225", "22222222-2222-4222-8222-222222222226"],
+  "packagingSupported": false,
+  "recommendedCollectionVersionId": null
+}

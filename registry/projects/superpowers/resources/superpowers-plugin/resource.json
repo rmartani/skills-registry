@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource",
+  "id": "33333333-3333-4333-8333-333333333335",
+  "projectId": "33333333-3333-4333-8333-333333333333",
+  "collectionId": "33333333-3333-4333-8333-333333333334",
+  "slug": "superpowers-plugin",
+  "type": "plugin",
+  "publication": { "status": "active", "publishedAt": "2026-08-19T00:00:00Z", "archivedAt": null },
+  "official": {
+    "name": "Superpowers Plugin",
+    "description": "An agentic skills framework and software development methodology for multiple coding-agent harnesses.",
+    "homepageUrl": "https://github.com/obra/superpowers",
+    "repositoryUrl": "https://github.com/obra/superpowers",
+    "maintainer": { "name": "Jesse Vincent / Prime Radiant", "url": "https://primeradiant.com" },
+    "license": { "spdx": "MIT", "name": "MIT License", "url": "https://github.com/obra/superpowers/blob/v6.3.0/LICENSE", "redistribution": "allowed", "noticePaths": ["LICENSE"] }
+  },
+  "editorial": {
+    "descriptionPtBr": "Plugin Superpowers com variantes oficiais para diferentes harnesses de agentes.",
+    "notesPtBr": "As instruções por harness são preservadas; o registry não executa hooks nem conteúdo upstream.",
+    "tags": ["plugin", "multi-harness", "desenvolvimento"]
+  },
+  "source": { "repositoryUrl": "https://github.com/obra/superpowers", "monitoredPath": ".", "versionStrategy": "github-release", "packageName": null, "tagPattern": "^v\\d+\\.\\d+\\.\\d+$", "candidatePolicy": "stable", "includeExperimental": false },
+  "installationVariants": [
+    { "key": "claude", "target": "claude-code", "label": "Claude Code", "kind": "command", "command": "/plugin install superpowers@claude-plugins-official", "url": null, "steps": null, "warningPtBr": null, "officialSourceUrl": "https://github.com/obra/superpowers" },
+    { "key": "cursor", "target": "cursor", "label": "Cursor", "kind": "command", "command": "/add-plugin superpowers", "url": null, "steps": null, "warningPtBr": null, "officialSourceUrl": "https://github.com/obra/superpowers" },
+    { "key": "gemini", "target": "gemini", "label": "Gemini", "kind": "command", "command": "gemini extensions install https://github.com/obra/superpowers", "url": null, "steps": null, "warningPtBr": null, "officialSourceUrl": "https://github.com/obra/superpowers" },
+    { "key": "pi", "target": "pi", "label": "pi", "kind": "command", "command": "pi install git:github.com/obra/superpowers", "url": null, "steps": null, "warningPtBr": null, "officialSourceUrl": "https://github.com/obra/superpowers" }
+  ],
+  "recommendedVersionId": "33333333-3333-4333-8333-333333333337"
+}

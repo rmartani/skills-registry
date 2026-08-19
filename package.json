@@ -1,0 +1,30 @@
+{
+  "name": "@rmartani/skills-registry",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Canonical manifests, validation and deterministic packaging for the Stancatti Skills Registry.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "tsx --test tests/**/*.test.ts",
+    "validate": "tsx src/cli.ts validate",
+    "index": "tsx src/cli.ts index",
+    "package:dry-run": "tsx src/cli.ts package:dry-run",
+    "seed:resolve": "tsx src/cli.ts seed:resolve",
+    "check:index": "npm run index && git diff --exit-code -- registry/index.json"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "fflate": "^0.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}

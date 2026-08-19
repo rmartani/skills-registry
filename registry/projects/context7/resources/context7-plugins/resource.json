@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource",
+  "id": "22222222-2222-4222-8222-222222222226",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "collectionId": "22222222-2222-4222-8222-222222222223",
+  "slug": "context7-plugins",
+  "type": "plugin",
+  "publication": { "status": "active", "publishedAt": "2026-08-19T00:00:00Z", "archivedAt": null },
+  "official": {
+    "name": "Context7 Plugins",
+    "description": "Context7 plugin integrations and harness-specific configurations from the official repository.",
+    "homepageUrl": "https://context7.com/docs",
+    "repositoryUrl": "https://github.com/upstash/context7",
+    "maintainer": { "name": "Upstash, Inc.", "url": "https://github.com/upstash" },
+    "license": { "spdx": "MIT", "name": "MIT License", "url": "https://github.com/upstash/context7/blob/master/LICENSE", "redistribution": "allowed", "noticePaths": ["LICENSE"] }
+  },
+  "editorial": {
+    "descriptionPtBr": "Plugins Context7 para diferentes harnesses, versionados separadamente do MCP e do CLI.",
+    "notesPtBr": "Algumas variantes são wrappers do serviço remoto e não substituem o backend hospedado.",
+    "tags": ["context7", "plugin", "cursor", "opencode"]
+  },
+  "source": { "repositoryUrl": "https://github.com/upstash/context7", "monitoredPath": "plugins", "versionStrategy": "package-release", "packageName": "@upstash/context7-opencode", "tagPattern": "^@upstash/context7-opencode@", "candidatePolicy": "stable", "includeExperimental": false },
+  "installationVariants": [
+    { "key": "cursor", "target": "cursor", "label": "Cursor", "kind": "steps", "command": null, "url": null, "steps": ["Adicione o plugin Context7 pelo marketplace do Cursor.", "Siga a configuração OAuth oficial do MCP Context7."], "warningPtBr": "A variante usa o serviço MCP remoto oficial.", "officialSourceUrl": "https://github.com/upstash/context7/tree/master/plugins/cursor/context7" },
+    { "key": "setup", "target": "generic", "label": "Setup por harness", "kind": "command", "command": "npx ctx7 setup", "url": null, "steps": null, "warningPtBr": null, "officialSourceUrl": "https://context7.com/docs/clients/cli" }
+  ],
+  "recommendedVersionId": "22222222-2222-4222-8222-222222222229"
+}

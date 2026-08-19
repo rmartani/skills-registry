@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "33333333-3333-4333-8333-333333333337",
+  "resourceId": "33333333-3333-4333-8333-333333333335",
+  "label": "6.3.0",
+  "ref": { "type": "release", "value": "v6.3.0", "commitSha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797" },
+  "monitoredPathSha256": "0cc611204476e5a406ea3d0a6297c00f3f8350aef1233b4d0a45f861b26b11c9",
+  "upstreamPublishedAt": "2026-08-12T16:58:30Z",
+  "approvedAt": "2026-08-19T00:00:00Z",
+  "officialDownloadUrl": "https://github.com/obra/superpowers/releases/tag/v6.3.0",
+  "packaging": { "mode": "registry-zip", "packagedAt": "2026-08-19T00:00:00Z", "artifactFileName": "superpowers-plugin-6.3.0.zip", "artifactSha256": "add29310608c6760cb8c5e6978a2eb6dece8b6505399f53f0dd46359dd512664", "payloadSha256": "8a31e742c080e99947a92d10241428a3cc7b6b1d30366c49e4ff9b1c7bea8a1b", "sizeBytes": 664633, "githubReleaseTag": "resource/superpowers-plugin/6.3.0" }
+}

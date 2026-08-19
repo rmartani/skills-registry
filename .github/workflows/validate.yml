@@ -1,0 +1,36 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Build
+        run: npm run build
+      - name: Tests
+        run: npm test
+      - name: Validate schemas and references
+        run: npm run validate
+      - name: Rebuild generated index
+        run: npm run index
+      - name: Require committed generated index
+        run: git diff --exit-code -- registry/index.json
+      - name: Safe package dry-run
+        run: npm run package:dry-run

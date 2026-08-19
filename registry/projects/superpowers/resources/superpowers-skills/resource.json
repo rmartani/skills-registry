@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource",
+  "id": "33333333-3333-4333-8333-333333333336",
+  "projectId": "33333333-3333-4333-8333-333333333333",
+  "collectionId": "33333333-3333-4333-8333-333333333334",
+  "slug": "superpowers-skills",
+  "type": "skill-pack",
+  "publication": { "status": "active", "publishedAt": "2026-08-19T00:00:00Z", "archivedAt": null },
+  "official": {
+    "name": "Superpowers Skills",
+    "description": "The Superpowers skill pack with a structured software-development methodology.",
+    "homepageUrl": "https://github.com/obra/superpowers",
+    "repositoryUrl": "https://github.com/obra/superpowers",
+    "maintainer": { "name": "Jesse Vincent / Prime Radiant", "url": "https://primeradiant.com" },
+    "license": { "spdx": "MIT", "name": "MIT License", "url": "https://github.com/obra/superpowers/blob/v6.3.0/LICENSE", "redistribution": "allowed", "noticePaths": ["LICENSE"] }
+  },
+  "editorial": {
+    "descriptionPtBr": "Skill pack Superpowers com práticas de planejamento, TDD, debugging e revisão.",
+    "notesPtBr": "Escolha a variante de instalação compatível com seu harness.",
+    "tags": ["skills", "tdd", "code-review", "multi-harness"]
+  },
+  "source": { "repositoryUrl": "https://github.com/obra/superpowers", "monitoredPath": "skills", "versionStrategy": "github-release", "packageName": null, "tagPattern": "^v\\d+\\.\\d+\\.\\d+$", "candidatePolicy": "stable", "includeExperimental": false },
+  "installationVariants": [
+    { "key": "claude", "target": "claude-code", "label": "Claude Code", "kind": "steps", "command": null, "url": null, "steps": ["Instale o plugin Superpowers pelo marketplace oficial do Claude.", "Confirme que as skills foram habilitadas no harness."], "warningPtBr": null, "officialSourceUrl": "https://github.com/obra/superpowers" },
+    { "key": "codex", "target": "codex", "label": "Codex", "kind": "url", "command": null, "url": "https://github.com/openai/plugins", "steps": null, "warningPtBr": "A disponibilidade depende do marketplace do Codex.", "officialSourceUrl": "https://github.com/obra/superpowers" },
+    { "key": "generic", "target": "generic", "label": "Outros harnesses", "kind": "command", "command": "agy plugin install https://github.com/obra/superpowers", "url": null, "steps": null, "warningPtBr": null, "officialSourceUrl": "https://github.com/obra/superpowers" }
+  ],
+  "recommendedVersionId": "33333333-3333-4333-8333-333333333338"
+}

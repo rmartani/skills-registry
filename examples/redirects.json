@@ -1,0 +1,5 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "redirects",
+  "redirects": [{ "from": "old-resource", "to": "example-resource", "resourceId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc", "reason": "Migração editorial explícita." }]
+}

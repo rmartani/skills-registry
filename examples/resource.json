@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource",
+  "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+  "projectId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "collectionId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+  "slug": "example-resource",
+  "type": "skill",
+  "publication": { "status": "active", "publishedAt": "2026-08-19T00:00:00Z", "archivedAt": null },
+  "official": {
+    "name": "Example Resource",
+    "description": "A harmless example resource.",
+    "homepageUrl": "https://example.com/resource",
+    "repositoryUrl": "https://github.com/example/project",
+    "maintainer": { "name": "Example Maintainer", "url": "https://github.com/example" },
+    "license": { "spdx": "MIT", "name": "MIT License", "url": "https://opensource.org/license/mit", "redistribution": "allowed", "noticePaths": ["LICENSE"] }
+  },
+  "editorial": { "descriptionPtBr": "Recurso de exemplo para fixtures.", "notesPtBr": null, "tags": ["exemplo"] },
+  "source": { "repositoryUrl": "https://github.com/example/project", "monitoredPath": "skills", "versionStrategy": "git-tag", "packageName": null, "tagPattern": "^v", "candidatePolicy": "stable", "includeExperimental": false },
+  "installationVariants": [{ "key": "generic", "target": "generic", "label": "Instalação oficial", "kind": "url", "command": null, "url": "https://example.com/install", "steps": null, "warningPtBr": null, "officialSourceUrl": "https://example.com/install" }],
+  "recommendedVersionId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd"
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "22222222-2222-4222-8222-222222222228",
+  "resourceId": "22222222-2222-4222-8222-222222222225",
+  "label": "0.5.8",
+  "ref": { "type": "release", "value": "ctx7@0.5.8", "commitSha": "5284672feb575908efead6fcf1b5e542f8d607bb" },
+  "monitoredPathSha256": "920bd574aada8e02e4565ff87924a03f70ff5d2dd83aade25b7bdbbed7ac616d",
+  "upstreamPublishedAt": "2026-08-11T13:22:50Z",
+  "approvedAt": "2026-08-19T00:00:00Z",
+  "officialDownloadUrl": "https://github.com/upstash/context7/releases/tag/ctx7%400.5.8",
+  "packaging": { "mode": "registry-zip", "packagedAt": "2026-08-19T00:00:00Z", "artifactFileName": "context7-cli-skills-0.5.8.zip", "artifactSha256": "e97e868aaba6b6aa03f3b0f8cdc7c8345d6d55516615d801abc7124d62c1d196", "payloadSha256": "7cbe9a43feb37a09fe41a7fdba8fa3d03fa6ec492a8ca0f1b35159853adf3754", "sizeBytes": 105815, "githubReleaseTag": "resource/context7-cli-skills/0.5.8" }
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "project",
+  "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "slug": "example-project",
+  "official": {
+    "name": "Example Project",
+    "repositoryUrl": "https://github.com/example/project",
+    "homepageUrl": "https://example.com/project",
+    "maintainer": { "name": "Example Maintainer", "url": "https://github.com/example" },
+    "defaultBranch": "main"
+  }
+}

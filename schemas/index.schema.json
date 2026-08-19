@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.stancatti.dev/schemas/index.schema.json",
+  "title": "Skills Registry generated index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "kind", "entries"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "kind": { "const": "registry-index" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "kind", "id", "sha256"],
+        "properties": {
+          "path": { "type": "string", "pattern": "^projects/[a-z0-9]+(?:-[a-z0-9]+)*/.+\\.json$", "maxLength": 500 },
+          "kind": { "enum": ["project", "collection", "resource", "resource-version", "collection-version"] },
+          "id": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      },
+      "uniqueItems": true
+    }
+  }
+}

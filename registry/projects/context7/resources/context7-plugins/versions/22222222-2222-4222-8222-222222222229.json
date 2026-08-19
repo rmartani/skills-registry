@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "22222222-2222-4222-8222-222222222229",
+  "resourceId": "22222222-2222-4222-8222-222222222226",
+  "label": "0.1.0",
+  "ref": { "type": "release", "value": "@upstash/context7-opencode@0.1.0", "commitSha": "5284672feb575908efead6fcf1b5e542f8d607bb" },
+  "monitoredPathSha256": "687ebe6994705f50f524a5b6d2f023a1c400fbe8ec7011915ea55397136b0601",
+  "upstreamPublishedAt": "2026-08-18T12:27:49Z",
+  "approvedAt": "2026-08-19T00:00:00Z",
+  "officialDownloadUrl": "https://github.com/upstash/context7/releases/tag/%40upstash%2Fcontext7-opencode%400.1.0",
+  "packaging": { "mode": "registry-zip", "packagedAt": "2026-08-19T00:00:00Z", "artifactFileName": "context7-plugins-0.1.0.zip", "artifactSha256": "0ceed6169726a3f93747d1afea58a4e94412c362d571a58b06528edd3b7f344e", "payloadSha256": "4275774688780969a58961ab91ce04d0db8680266bcb8c4c326e56cc68739a18", "sizeBytes": 27405, "githubReleaseTag": "resource/context7-plugins/0.1.0" }
+}

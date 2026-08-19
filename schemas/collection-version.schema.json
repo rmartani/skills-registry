@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.stancatti.dev/schemas/collection-version.schema.json",
+  "title": "Skills Registry collection version",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "kind", "id", "collectionId", "label", "resourceVersionIds", "approvedAt", "packaging"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "kind": { "const": "collection-version" },
+    "id": { "$ref": "#/$defs/uuid" },
+    "collectionId": { "$ref": "#/$defs/uuid" },
+    "label": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "resourceVersionIds": { "type": "array", "items": { "$ref": "#/$defs/uuid" }, "minItems": 1, "uniqueItems": true },
+    "approvedAt": { "$ref": "#/$defs/timestamp" },
+    "packaging": { "$ref": "#/$defs/packaging" }
+  },
+  "$defs": {
+    "uuid": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$" },
+    "artifactFileName": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,160}\\.zip$" },
+    "packaging": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false, "required": ["mode", "packagedAt", "artifactFileName", "artifactSha256", "payloadSha256", "sizeBytes", "githubReleaseTag"],
+          "properties": {
+            "mode": { "const": "registry-zip" }, "packagedAt": { "$ref": "#/$defs/timestamp" }, "artifactFileName": { "$ref": "#/$defs/artifactFileName" }, "artifactSha256": { "$ref": "#/$defs/sha256" }, "payloadSha256": { "$ref": "#/$defs/sha256" }, "sizeBytes": { "type": "integer", "minimum": 1, "maximum": 52428800 }, "githubReleaseTag": { "type": "string", "pattern": "^collection/[a-z0-9-]+/[A-Za-z0-9._@+-]+$", "maxLength": 240 }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["mode", "packagedAt", "artifactFileName", "artifactSha256", "payloadSha256", "sizeBytes", "githubReleaseTag"],
+          "properties": {
+            "mode": { "const": "link-only" }, "packagedAt": { "$ref": "#/$defs/timestamp" }, "artifactFileName": { "type": "null" }, "artifactSha256": { "type": "null" }, "payloadSha256": { "type": "null" }, "sizeBytes": { "type": "null" }, "githubReleaseTag": { "type": "null" }
+          }
+        }
+      ]
+    }
+  }
+}

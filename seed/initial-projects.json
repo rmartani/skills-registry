@@ -1,0 +1,19 @@
+[
+  {
+    "url": "https://github.com/mattpocock/skills",
+    "policy": "promoted",
+    "includeExperimental": false
+  },
+  {
+    "url": "https://github.com/upstash/context7",
+    "policy": "stable",
+    "independentVersionStreams": true,
+    "includeHostedCorpus": false,
+    "includeExperimental": false
+  },
+  {
+    "url": "https://github.com/obra/superpowers",
+    "policy": "stable",
+    "includeExperimental": false
+  }
+]

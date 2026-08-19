@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "collection",
+  "id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+  "projectId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "slug": "example-collection",
+  "officialName": "Example Collection",
+  "editorial": {
+    "descriptionPtBr": "Coleção de exemplo para fixtures.",
+    "notesPtBr": null,
+    "tags": ["exemplo"]
+  },
+  "resourceIds": ["cccccccc-cccc-4ccc-8ccc-cccccccccccc"],
+  "packagingSupported": true,
+  "recommendedCollectionVersionId": null
+}

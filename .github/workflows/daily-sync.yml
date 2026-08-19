@@ -1,0 +1,57 @@
+name: daily-registry-sync
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: "Escopo da sincronização"
+        required: false
+        default: all
+        type: choice
+        options: [all, resources]
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      STANCATTI_API_URL: ${{ secrets.STANCATTI_API_URL }}
+      STANCATTI_API_KEY: ${{ secrets.STANCATTI_API_KEY }}
+    steps:
+      - name: Validate server-side configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$STANCATTI_API_URL"
+          test -n "$STANCATTI_API_KEY"
+          case "$STANCATTI_API_URL" in https://*) ;; *) echo "STANCATTI_API_URL precisa usar HTTPS" >&2; exit 1 ;; esac
+      - name: Request idempotent upstream detection
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_SCOPE: ${{ inputs.scope }}
+        run: |
+          set -euo pipefail
+          scope="${DISPATCH_SCOPE:-all}"
+          case "$scope" in all|resources) ;; *) echo "scope inválido" >&2; exit 1 ;; esac
+          trigger="scheduled"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then trigger="manual"; fi
+          idempotency_key="daily-$(date -u +%F)"
+          request_body="$(jq -cn --arg scope "$scope" --arg trigger "$trigger" --arg key "$idempotency_key" '{scope:$scope,resourceIds:[],trigger:$trigger,idempotencyKey:$key}')"
+          response_file="$(mktemp)"
+          trap 'rm -f "$response_file"' EXIT
+          status="$(curl --fail-with-body --silent --show-error --output "$response_file" --write-out '%{http_code}' \
+            --request POST "$STANCATTI_API_URL/api/admin/registry/sync-runs" \
+            --header 'Content-Type: application/json' \
+            --header "X-API-Key: $STANCATTI_API_KEY" \
+            --data "$request_body")"
+          case "$status" in 2??) ;; *) echo "API sync falhou com HTTP $status" >&2; exit 1 ;; esac
+          sync_id="$(jq -er '.syncRunId' "$response_file")"
+          test -n "$sync_id"
+          echo "Sync run criado: $sync_id"
+          echo "A detecção fica no backend; candidatos seguem revisão humana e preparação de Pull Request."

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "collection",
+  "id": "33333333-3333-4333-8333-333333333334",
+  "projectId": "33333333-3333-4333-8333-333333333333",
+  "slug": "superpowers-tools",
+  "officialName": "Superpowers",
+  "editorial": {
+    "descriptionPtBr": "Plugin multi-harness com um conjunto de skills de desenvolvimento.",
+    "notesPtBr": "As variantes preservam as instruções oficiais de instalação de cada harness.",
+    "tags": ["skills", "plugin", "multi-harness"]
+  },
+  "resourceIds": ["33333333-3333-4333-8333-333333333335", "33333333-3333-4333-8333-333333333336"],
+  "packagingSupported": false,
+  "recommendedCollectionVersionId": null
+}

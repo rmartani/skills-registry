@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://registry.stancatti.dev/schemas/collection.schema.json",
+  "title": "Skills Registry collection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "kind", "id", "projectId", "slug", "officialName", "editorial", "resourceIds", "packagingSupported", "recommendedCollectionVersionId"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "kind": { "const": "collection" },
+    "id": { "$ref": "#/$defs/uuid" },
+    "projectId": { "$ref": "#/$defs/uuid" },
+    "slug": { "$ref": "#/$defs/slug" },
+    "officialName": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "editorial": { "$ref": "#/$defs/editorial" },
+    "resourceIds": { "type": "array", "items": { "$ref": "#/$defs/uuid" }, "minItems": 1, "uniqueItems": true },
+    "packagingSupported": { "type": "boolean" },
+    "recommendedCollectionVersionId": { "anyOf": [{ "$ref": "#/$defs/uuid" }, { "type": "null" }] }
+  },
+  "$defs": {
+    "uuid": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "minLength": 1, "maxLength": 80 },
+    "editorial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["descriptionPtBr", "notesPtBr", "tags"],
+      "properties": {
+        "descriptionPtBr": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "notesPtBr": { "anyOf": [{ "type": "string", "maxLength": 4000 }, { "type": "null" }] },
+        "tags": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 40 }, "uniqueItems": true, "maxItems": 30 }
+      }
+    }
+  }
+}

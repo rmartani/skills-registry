@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "11111111-1111-4111-8111-111111111121",
+  "resourceId": "11111111-1111-4111-8111-111111111113",
+  "label": "1.2.3",
+  "ref": { "type": "release", "value": "v1.2.3", "commitSha": "6acc160e4e0cd062dbbbd7a1b26ae92855edf07e" },
+  "monitoredPathSha256": "5e54f351e997ed09f1457693c3d1d2246e5a3be1cc3d6f6cb645075007cf152c",
+  "upstreamPublishedAt": "2026-08-06T14:05:28Z",
+  "approvedAt": "2026-08-19T00:00:00Z",
+  "officialDownloadUrl": "https://github.com/mattpocock/skills/releases/tag/v1.2.3",
+  "packaging": { "mode": "registry-zip", "packagedAt": "2026-08-19T00:00:00Z", "artifactFileName": "mattpocock-skills-1.2.3.zip", "artifactSha256": "00b4aaf9d306038f8dc5b941ba0f87fd56e0ea498179c68d899e819132627377", "payloadSha256": "0f02f59b5e276c80efeea548392ebf629769e8efbba61f5f862d759f921a9e36", "sizeBytes": 134277, "githubReleaseTag": "resource/mattpocock-skills/1.2.3" }
+}

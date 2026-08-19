@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+  "resourceId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+  "label": "1.0.0",
+  "ref": { "type": "release", "value": "v1.0.0", "commitSha": "1111111111111111111111111111111111111111" },
+  "monitoredPathSha256": "2222222222222222222222222222222222222222222222222222222222222222",
+  "upstreamPublishedAt": "2026-08-18T00:00:00Z",
+  "approvedAt": "2026-08-19T00:00:00Z",
+  "officialDownloadUrl": "https://github.com/example/project/releases/tag/v1.0.0",
+  "packaging": { "mode": "link-only", "packagedAt": "2026-08-19T00:00:00Z", "artifactFileName": null, "artifactSha256": null, "payloadSha256": null, "sizeBytes": null, "githubReleaseTag": null }
+}

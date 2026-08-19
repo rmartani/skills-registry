@@ -1,0 +1,1 @@
+Fixtures in this directory are intentionally standalone examples; registry/index.json is generated from canonical manifests and is not copied from this fixture.

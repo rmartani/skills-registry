@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "collection-version",
+  "id": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+  "collectionId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+  "label": "1.0.0",
+  "resourceVersionIds": ["dddddddd-dddd-4ddd-8ddd-dddddddddddd"],
+  "approvedAt": "2026-08-19T00:00:00Z",
+  "packaging": { "mode": "link-only", "packagedAt": "2026-08-19T00:00:00Z", "artifactFileName": null, "artifactSha256": null, "payloadSha256": null, "sizeBytes": null, "githubReleaseTag": null }
+}

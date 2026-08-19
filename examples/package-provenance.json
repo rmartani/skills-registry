@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "stancatti-registry-package",
+  "resourceId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+  "resourceSlug": "example-resource",
+  "origin": { "repositoryUrl": "https://github.com/example/project", "refType": "release", "refValue": "v1.0.0", "commitSha": "1111111111111111111111111111111111111111", "monitoredPath": "skills" },
+  "packagedAt": "2026-08-19T00:00:00Z",
+  "license": { "spdx": "MIT", "includedFiles": ["LICENSE"] },
+  "payload": { "sha256": "2222222222222222222222222222222222222222222222222222222222222222", "fileCount": 1, "uncompressedBytes": 42 }
+}

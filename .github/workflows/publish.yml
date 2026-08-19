@@ -1,0 +1,72 @@
+name: publish-registry
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    # Explicit opt-in prevents an initial repository push from publishing assets.
+    if: vars.ENABLE_REGISTRY_PUBLISH == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      STANCATTI_API_URL: ${{ secrets.STANCATTI_API_URL }}
+      STANCATTI_API_KEY: ${{ secrets.STANCATTI_API_KEY }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Validate before publishing
+        run: |
+          npm run build
+          npm test
+          npm run validate
+          npm run index
+          git diff --exit-code -- registry/index.json
+      - name: Rebuild deterministic approved packages
+        run: npm run package:dry-run -- --live --output .generated/packages
+      - name: Create or update immutable resource releases
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' manifest; do
+            mode="$(jq -r '.packaging.mode' "$manifest")"
+            [ "$mode" = "registry-zip" ] || continue
+            tag="$(jq -r '.packaging.githubReleaseTag' "$manifest")"
+            file="$(jq -r '.packaging.artifactFileName' "$manifest")"
+            title="$(jq -r '.resourceId + " " + .label' "$manifest")"
+            if ! gh release view "$tag" >/dev/null 2>&1; then
+              gh release create "$tag" --target "$GITHUB_SHA" --title "$title" --notes "Deterministic asset for the approved registry manifest."
+            fi
+            gh release upload "$tag" ".generated/packages/$file" ".generated/packages/$file.sha256" --clobber
+          done < <(find registry/projects -type f -path '*/resources/*/versions/*.json' -print0 | sort -z)
+      - name: Reconcile main commit in API
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$STANCATTI_API_URL"
+          test -n "$STANCATTI_API_KEY"
+          body="$(jq -cn --arg sha "$GITHUB_SHA" '{commitSha:$sha}')"
+          response_file="$(mktemp)"
+          trap 'rm -f "$response_file"' EXIT
+          status="$(curl --fail-with-body --silent --show-error --output "$response_file" --write-out '%{http_code}' \
+            --request POST "$STANCATTI_API_URL/api/admin/registry/reconcile" \
+            --header 'Content-Type: application/json' \
+            --header "X-API-Key: $STANCATTI_API_KEY" \
+            --data "$body")"
+          case "$status" in 2??) ;; *) echo "Reconcile falhou com HTTP $status; assets permanecem disponíveis para retry" >&2; exit 1 ;; esac
+          echo "Reconcile solicitado para $GITHUB_SHA"

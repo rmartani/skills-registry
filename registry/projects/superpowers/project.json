@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "project",
+  "id": "33333333-3333-4333-8333-333333333333",
+  "slug": "superpowers",
+  "official": {
+    "name": "Superpowers",
+    "repositoryUrl": "https://github.com/obra/superpowers",
+    "homepageUrl": "https://github.com/obra/superpowers",
+    "maintainer": { "name": "Jesse Vincent / Prime Radiant", "url": "https://primeradiant.com" },
+    "defaultBranch": "main"
+  }
+}
