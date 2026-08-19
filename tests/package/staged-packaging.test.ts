@@ -28,7 +28,12 @@ async function stagedRepository(): Promise<{ temporary: string; versionPath: str
   const temporary = await mkdtemp(path.join(os.tmpdir(), "skills-registry-package-prepare-"));
   await cp(rootDir, temporary, {
     recursive: true,
-    filter: (source) => !source.includes(`${path.sep}node_modules${path.sep}`) && !source.includes(`${path.sep}.git${path.sep}`) && !source.endsWith(`${path.sep}dist`)
+    filter: (source) => {
+      const relative = path.relative(rootDir, source).split(path.sep).join("/");
+      const isContext7Project = relative === "registry/projects/context7" || relative.startsWith("registry/projects/context7/");
+      if (relative.startsWith("registry/projects/") && !isContext7Project) return false;
+      return !relative.includes("node_modules/") && !relative.includes(".git/") && !relative.endsWith("dist");
+    }
   });
   const absoluteVersionPath = path.join(temporary, versionPath);
   const version = JSON.parse((await readFile(absoluteVersionPath)).toString()) as Record<string, any>;

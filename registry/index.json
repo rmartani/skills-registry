@@ -114,7 +114,7 @@
       "path": "projects/obra-superpowers/resources/obra-superpowers-brainstorming/resource.json",
       "kind": "resource",
       "id": "b84d295d-8ccb-4676-91ea-c6bbc7a905df",
-      "sha256": "e3aae39d46560a9d341e5590bdfa6813dcaa741810952fdfb1e268112190c8de"
+      "sha256": "112e9eab66b20e0d3c52d4ee38ab5a97d0283f1490dd42ca688634702de45701"
     },
     {
       "path": "projects/obra-superpowers/resources/obra-superpowers-brainstorming/versions/5d19af39-1bd7-49e9-bd59-d0aa80f6976b.json",
@@ -234,7 +234,7 @@
       "path": "projects/obra-superpowers/resources/obra-superpowers-subagent-driven-development/resource.json",
       "kind": "resource",
       "id": "bfe7650c-0713-4ca7-9795-74dcc5930bb9",
-      "sha256": "bbdca7d7eb6122b0533e6c9369bf336b6732012e4bfd6ac5c3a56e3cf40c4053"
+      "sha256": "270c075ba2245d42b0d6494af5440b833ef97e71779d9183b80c2eb34650afc7"
     },
     {
       "path": "projects/obra-superpowers/resources/obra-superpowers-subagent-driven-development/versions/529da525-3399-4cb0-9808-66a8ab39de4f.json",
@@ -318,7 +318,7 @@
       "path": "projects/obra-superpowers/resources/obra-superpowers-writing-skills/resource.json",
       "kind": "resource",
       "id": "66f2068b-65f5-47ed-818a-119279f2017c",
-      "sha256": "d992b3b0ce2f92d587b25343f4fe12b7089ccdb572326ace5a090365df69a822"
+      "sha256": "588c4d32ac02a2274235526054896cfb3e0525efe5e0d69a5e0b2ad33b69dd35"
     },
     {
       "path": "projects/obra-superpowers/resources/obra-superpowers-writing-skills/versions/eead6a1a-de58-4484-8802-b57935765056.json",
