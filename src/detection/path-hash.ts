@@ -23,7 +23,7 @@ export function relativeTreePath(filePath: string, monitoredPath: string): strin
   const monitor = normalizeMonitoredPath(monitoredPath);
   const normalized = filePath.replaceAll("\\", "/");
   if (monitor === ".") return normalized;
-  if (normalized === monitor) return "";
+  if (normalized === monitor) return monitor.slice(monitor.lastIndexOf("/") + 1);
   const prefix = `${monitor}/`;
   return normalized.startsWith(prefix) ? normalized.slice(prefix.length) : undefined;
 }
