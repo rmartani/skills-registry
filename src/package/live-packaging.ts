@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { GitHubClient } from "../github/github-client.js";
+import { relativeTreePath } from "../detection/path-hash.js";
 import { isCandidateAllowed } from "../detection/version-detector.js";
 import { writeIndex } from "../index/build-index.js";
 import { collectManifestFiles, validateRepository } from "../schema/validate.js";
@@ -45,12 +46,10 @@ function sourceEntries(
   candidatePolicy: ResourceManifest["source"]["candidatePolicy"],
   includeExperimental: boolean
 ): ArchiveEntry[] {
-  const monitor = monitoredPath.replaceAll("\\", "/").replace(/^\.\//, "").replace(/\/$/, "") || ".";
   return entries
     .filter((entry) => entry.type !== "directory")
     .map((entry) => {
-      const filePath = entry.path.replaceAll("\\", "/");
-      const relativePath = monitor === "." ? filePath : filePath.startsWith(`${monitor}/`) ? filePath.slice(monitor.length + 1) : undefined;
+      const relativePath = relativeTreePath(entry.path, monitoredPath);
       if (!relativePath || !isCandidateAllowed(relativePath, includeExperimental, candidatePolicy)) return undefined;
       return { ...entry, path: relativePath };
     })

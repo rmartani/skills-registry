@@ -6,6 +6,7 @@ import { zipSync } from "fflate";
 import { test } from "node:test";
 import { writeIndex } from "../../src/index/build-index.js";
 import { prepareStagedPackages } from "../../src/package/live-packaging.js";
+import { readZipArchive } from "../../src/package/archive-reader.js";
 import { validateRepository } from "../../src/schema/validate.js";
 
 const rootDir = path.resolve(process.cwd());
@@ -24,7 +25,7 @@ class FakeArchiveClient {
   }
 }
 
-async function stagedRepository(): Promise<{ temporary: string; versionPath: string }> {
+async function stagedRepository(monitoredPath = "packages/mcp"): Promise<{ temporary: string; versionPath: string }> {
   const temporary = await mkdtemp(path.join(os.tmpdir(), "skills-registry-package-prepare-"));
   await cp(rootDir, temporary, {
     recursive: true,
@@ -39,6 +40,10 @@ async function stagedRepository(): Promise<{ temporary: string; versionPath: str
   const version = JSON.parse((await readFile(absoluteVersionPath)).toString()) as Record<string, any>;
   version.packaging = { mode: "staged", packagedAt: "2026-08-19T00:00:00Z", artifactFileName: null, artifactSha256: null, payloadSha256: null, sizeBytes: null, githubReleaseTag: null };
   await writeFile(absoluteVersionPath, `${JSON.stringify(version, null, 2)}\n`);
+  const resourcePath = path.join(temporary, "registry/projects/context7/resources/context7-mcp/resource.json");
+  const resource = JSON.parse((await readFile(resourcePath)).toString()) as Record<string, any>;
+  resource.source.monitoredPath = monitoredPath;
+  await writeFile(resourcePath, `${JSON.stringify(resource, null, 2)}\n`);
   await writeIndex(temporary);
   return { temporary, versionPath: absoluteVersionPath };
 }
@@ -65,6 +70,24 @@ test("post-merge staging computes metadata, updates only the version and index, 
     assert.equal(converted.packaging.sizeBytes, prepared[0]?.sizeBytes);
     assert.deepEqual(await readFile(resourcePath), resourceBefore);
     await validateRepository(temporary);
+  } finally {
+    await rm(temporary, { recursive: true, force: true });
+  }
+});
+
+test("exact monitored files are packaged under their basename", async () => {
+  const { temporary } = await stagedRepository("packages/mcp/SKILL.md");
+  try {
+    const outputDir = path.join(temporary, ".generated", "packages");
+    const prepared = await prepareStagedPackages(temporary, outputDir, new FakeArchiveClient());
+    assert.equal(prepared.length, 1);
+
+    const artifact = await readFile(path.join(outputDir, "context7-mcp-4.0.2.zip"));
+    const entries = readZipArchive(artifact);
+    const payload = entries.find((entry) => entry.path === "SKILL.md");
+    assert.equal(new TextDecoder().decode(payload?.data), "safe payload\n");
+    assert.equal(entries.some((entry) => entry.path === "packages/mcp/SKILL.md"), false);
+    assert.ok(entries.some((entry) => entry.path === "LICENSE"));
   } finally {
     await rm(temporary, { recursive: true, force: true });
   }
