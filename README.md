@@ -46,7 +46,7 @@ npm run package:dry-run
 npm run package:prepare -- --output .generated/packages
 ```
 
-`npm run index` é determinístico. O CI exige que o índice gerado não produza diff no estado canônico. `npm run package:dry-run -- --live` baixa apenas archives oficiais para reconstruir assets em `.generated/packages/`; valida caminhos, limites e notices antes do inflate e nunca executa arquivos upstream. `npm run package:prepare` é reservado ao handoff pós-merge: converte somente versões `packaging.mode: staged` para `registry-zip` depois de gerar e conferir o pacote, atualizando apenas o manifesto da versão e o índice. O SHA do ZIP é distinto do `payload.sha256` dentro de `STANCATTI-REGISTRY.json`, pois um ZIP não pode conter seu próprio SHA sem autorreferência.
+`npm run index` é determinístico. O CI exige que o índice gerado não produza diff no estado canônico. `npm run package:dry-run -- --live` baixa apenas archives oficiais para reconstruir assets em `.generated/packages/`; valida caminhos, limites e notices antes do inflate e nunca executa arquivos upstream. `npm run package:prepare` é reservado ao handoff de publicação: converte somente versões `packaging.mode: staged` para `registry-zip` depois de gerar e conferir o pacote, atualizando apenas o manifesto da versão e o índice. O SHA do ZIP é distinto do `payload.sha256` dentro de `STANCATTI-REGISTRY.json`, pois um ZIP não pode conter seu próprio SHA sem autorreferência.
 
 Para resolver os seeds atuais sem alterar manifestos aprovados:
 
@@ -58,16 +58,16 @@ A saída fica somente em `.generated/seed/` (ignorada pelo Git) e contém releas
 
 ## Workflows
 
-- `validate.yml`: valida schemas/referências, testes, regenera o índice e faz dry-run/live seguro; somente PRs backend-geradas em `registry/publication/*` com `ENABLE_REGISTRY_PUBLISH=true` podem carregar `staged` (o handoff pós-merge é transitório), sem receber token ou release. Com o gate desligado, a CI falha com instrução para habilitá-lo ou converter para `registry-zip`.
+- `validate.yml`: valida schemas/referências, testes, regenera o índice e faz dry-run/live seguro; somente PRs backend-geradas em `registry/publication/*` com `ENABLE_REGISTRY_PUBLISH=true` podem carregar `staged`, sem receber token ou release. `main` rejeita `staged`; o gate desligado produz instrução para habilitá-lo ou converter para `registry-zip`.
 - `daily-sync.yml`: schedule diário e `workflow_dispatch`; `scope: all` mantém `resourceIds: []`, enquanto `scope: resources` exige `resource_ids` com UUIDs canônicos separados por vírgula; envia `scope`, `resourceIds`, `trigger` e uma chave idempotente para `POST /api/admin/registry/sync-runs` com `X-API-Key`.
-- `publish.yml`: somente em `main` e com `ENABLE_REGISTRY_PUBLISH=true`, converte `staged` pós-merge, comita apenas metadata/index gerados, reconstrói e verifica pacotes determinísticos, cria/atualiza Releases com `GITHUB_TOKEN` e solicita reconciliação pelo commit final. O gate permanece desligado no repositório inicial.
+- `publish.yml`: somente em `main` e com `ENABLE_REGISTRY_PUBLISH=true`, converte `staged` localmente e entrega metadata/index gerados em uma PR determinística `registry/publication/*`; releases e reconcile só rodam no push de `main` posterior ao merge humano dessa PR. O gate permanece desligado no repositório inicial.
 
 Secrets usados pelo workflow diário/publicação:
 
 - `STANCATTI_API_URL`
 - `STANCATTI_API_KEY`
 
-O token nunca é impresso. O `GITHUB_TOKEN` do publish tem apenas `contents: write`; a validação de PR possui `contents: read`. Configure branch protection exigindo o check `validate` antes de merge. Não habilite o gate de publish sem configurar e revisar os secrets server-side.
+O token nunca é impresso. O `GITHUB_TOKEN` do publish tem `contents: write` e `pull-requests: write`; a validação de PR possui `contents: read`. Configure branch protection exigindo o check `validate` antes de merge. Não habilite o gate de publish sem configurar e revisar os secrets server-side.
 
 ## Licenças upstream
 

@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: skills-registry-publish-main
@@ -15,9 +16,9 @@ concurrency:
 jobs:
   publish:
     # Explicit opt-in prevents an initial repository push from publishing assets.
-    # The generated handoff commit skips this job and is verified by the same
-    # validate workflow instead of recursively publishing itself.
-    if: vars.ENABLE_REGISTRY_PUBLISH == 'true' && !contains(github.event.head_commit.message, '[skip registry publish]')
+    # A staged main push is converted in a human-reviewed publication PR; the
+    # publication branch does not match on.push.branches: [main].
+    if: vars.ENABLE_REGISTRY_PUBLISH == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -38,16 +39,55 @@ jobs:
           cache: npm
       - name: Install without lifecycle scripts
         run: npm ci --ignore-scripts
+      - name: Detect staged publication handoff
+        id: staged
+        shell: bash
+        run: |
+          set -euo pipefail
+          export LC_ALL=C
+          staged_files=()
+          while IFS= read -r -d '' manifest; do
+            if jq -e '.packaging.mode == "staged"' "$manifest" >/dev/null; then
+              staged_files+=("$manifest")
+            fi
+          done < <(find registry/projects -type f -path '*/resources/*/versions/*.json' -print0 | sort -z)
+
+          if [ "${#staged_files[@]}" -eq 0 ]; then
+            echo "has_staged=false" >> "$GITHUB_OUTPUT"
+            echo "Nenhuma versão staged; publicação canônica pode continuar."
+            exit 0
+          fi
+
+          # The digest is based on sorted paths and manifest contents, so a
+          # retry for the same staged input reuses exactly the same branch/PR.
+          staged_digest="$({
+            for manifest in "${staged_files[@]}"; do
+              printf '%s\n' "$manifest"
+              sha256sum "$manifest"
+            done
+          } | sha256sum | cut -c1-16)"
+          handoff_branch="registry/publication/$staged_digest"
+          {
+            echo "has_staged=true"
+            echo "branch=$handoff_branch"
+            echo "digest=$staged_digest"
+          } >> "$GITHUB_OUTPUT"
+          echo "${#staged_files[@]} versão(ões) staged exigem handoff humano em $handoff_branch."
       - name: Validate publication input
         env:
           REGISTRY_ALLOW_STAGED: "true"
+          HAS_STAGED: ${{ steps.staged.outputs.has_staged }}
         run: |
           npm run build
           npm test
           npm run index
           npm run validate
-          git diff --exit-code -- registry/index.json
-      - name: Convert explicit staged versions after merge
+          if [ "$HAS_STAGED" = "true" ]; then
+            echo "Índice regenerado para o handoff staged; a conversão será revisada na PR antes do merge."
+          else
+            git diff --exit-code -- registry/index.json
+          fi
+      - name: Convert explicit staged versions for publication handoff
         run: npm run package:prepare -- --output .generated/staged-packages
       - name: Validate converted canonical state
         env:
@@ -55,44 +95,120 @@ jobs:
         run: |
           npm run index
           npm run validate
-      - name: Rebuild every approved registry ZIP
-        run: npm run package:dry-run -- --live --output .generated/packages
-      - name: Commit only generated package metadata and index
+      - name: Create or update staged publication PR
         id: handoff
+        if: steps.staged.outputs.has_staged == 'true'
         shell: bash
+        env:
+          HANDOFF_BRANCH: ${{ steps.staged.outputs.branch }}
+          STAGED_DIGEST: ${{ steps.staged.outputs.digest }}
         run: |
           set -euo pipefail
           allowed='^(registry/index\.json|registry/projects/[^/]+/resources/[^/]+/versions/[^/]+\.json)$'
+          title="chore(registry): finalize staged packages"
+          body_file="$(mktemp)"
+          trap 'rm -f "$body_file"' EXIT
+          cat > "$body_file" <<EOF
+          <!-- registry-publication-handoff -->
+          This generated handoff converts staged registry versions into verified canonical manifests.
+
+          Staged input digest: \`$STAGED_DIGEST\`
+
+          A human review and merge of this PR into main is mandatory. This workflow never pushes directly to main, force-pushes, or merges this PR. Releases and reconcile run only after the human merge triggers the subsequent main publication.
+          EOF
+
           # Include untracked files too: an unexpected generated path must fail
           # closed rather than being silently omitted from the handoff commit.
           changed="$(git status --porcelain=v1 --untracked-files=all | sed -E 's/^.. //')"
-          if [ -n "$changed" ] && printf '%s\n' "$changed" | grep -Ev "$allowed" | grep -q .; then
-            echo "A preparação staged alterou um caminho não gerado:" >&2
-            printf '%s\n' "$changed" | grep -Ev "$allowed" >&2
+          if [ -z "$changed" ]; then
+            echo "A conversão staged não gerou metadata para o handoff." >&2
             exit 1
           fi
-          if [ -n "$changed" ]; then
-            git add registry/index.json
-            while IFS= read -r file; do
-              [ -z "$file" ] || git add "$file"
-            done < <(printf '%s\n' "$changed" | grep -E '^registry/projects/[^/]+/resources/[^/]+/versions/[^/]+\.json$' || true)
-            cached="$(git diff --cached --name-only)"
-            if [ -n "$cached" ] && printf '%s\n' "$cached" | grep -Ev "$allowed" | grep -q .; then
-              echo "O commit de handoff contém um caminho não gerado:" >&2
-              printf '%s\n' "$cached" | grep -Ev "$allowed" >&2
-              exit 1
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo "A preparação staged alterou um caminho não gerado:" >&2
+            printf '%s\n' "$unexpected" >&2
+            exit 1
+          fi
+
+          git add registry/index.json
+          while IFS= read -r file; do
+            [ -z "$file" ] || git add -- "$file"
+          done < <(printf '%s\n' "$changed" | grep -E '^registry/projects/[^/]+/resources/[^/]+/versions/[^/]+\.json$' || true)
+          cached="$(git diff --cached --name-only)"
+          unexpected_cached="$(printf '%s\n' "$cached" | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected_cached" ]; then
+            echo "O commit de handoff contém um caminho não gerado:" >&2
+            printf '%s\n' "$unexpected_cached" >&2
+            exit 1
+          fi
+          if [ -z "$cached" ]; then
+            echo "O handoff staged não contém alterações geradas." >&2
+            exit 1
+          fi
+          git diff --cached --check
+
+          open_pr_json="$(gh pr list --state open --base main --head "$HANDOFF_BRANCH" --json number,url --limit 1)"
+          open_pr_number="$(jq -r '.[0].number // empty' <<< "$open_pr_json")"
+          if [ -n "$open_pr_number" ]; then
+            # Reuse the deterministic open PR; do not create a duplicate or
+            # replace a human's branch/description edits.
+            echo "Reutilizando PR de handoff #$open_pr_number: merge humano obrigatório."
+            exit 0
+          fi
+
+          # A regular push is intentional: an existing branch that differs from
+          # the generated tree is rejected instead of being force-pushed over
+          # human work.
+          remote_ref="refs/remotes/origin/$HANDOFF_BRANCH"
+          if git fetch origin "$HANDOFF_BRANCH"; then
+            if git show-ref --verify --quiet "$remote_ref"; then
+              remote_changed="$(git diff --name-only main..."$remote_ref" -- || true)"
+              unexpected_remote="$(printf '%s\n' "$remote_changed" | grep -Ev "$allowed" || true)"
+              if [ -n "$unexpected_remote" ]; then
+                echo "Branch $HANDOFF_BRANCH contém trabalho fora da allowlist; recusando sobrescrever trabalho humano." >&2
+                printf '%s\n' "$unexpected_remote" >&2
+                exit 1
+              fi
+              mismatch=""
+              while IFS= read -r file; do
+                [ -z "$file" ] && continue
+                if ! git diff --quiet "$remote_ref" -- "$file"; then
+                  mismatch="$file"
+                  break
+                fi
+              done <<< "$changed"
+              if [ -n "$mismatch" ]; then
+                echo "Branch $HANDOFF_BRANCH já existe com metadata diferente; recusando sobrescrever trabalho humano." >&2
+                exit 1
+              fi
+              echo "Reutilizando branch de handoff existente $HANDOFF_BRANCH sem force-push."
             fi
-            git diff --cached --check
+          fi
+
+          if ! git show-ref --verify --quiet "$remote_ref"; then
+            git switch --create "$HANDOFF_BRANCH" main
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "chore: finalize staged registry packages [skip registry publish]"
-            git push origin HEAD:main
+            git commit -m "$title" -m "Generated publication handoff for staged digest $STAGED_DIGEST.
+
+            A human must review and merge this PR into main. Releases and reconcile are intentionally deferred until that merge."
+            git push --set-upstream origin "$HANDOFF_BRANCH"
           fi
-          echo "publish_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+          gh pr create --base main --head "$HANDOFF_BRANCH" --title "$title" --body-file "$body_file"
+      - name: Capture canonical main commit
+        id: publish
+        if: steps.staged.outputs.has_staged == 'false'
+        run: echo "publish_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Rebuild every approved registry ZIP
+        if: steps.staged.outputs.has_staged == 'false'
+        run: npm run package:dry-run -- --live --output .generated/packages
       - name: Create or update verified resource releases
+        if: steps.staged.outputs.has_staged == 'false'
         shell: bash
         env:
-          PUBLISH_SHA: ${{ steps.handoff.outputs.publish_sha }}
+          PUBLISH_SHA: ${{ steps.publish.outputs.publish_sha }}
         run: |
           set -euo pipefail
           while IFS= read -r -d '' manifest; do
@@ -114,9 +230,10 @@ jobs:
             gh release upload "$tag" "$artifact" "$artifact.sha256" --clobber
           done < <(find registry/projects -type f -path '*/resources/*/versions/*.json' -print0 | sort -z)
       - name: Reconcile verified main commit in API
+        if: steps.staged.outputs.has_staged == 'false'
         shell: bash
         env:
-          PUBLISH_SHA: ${{ steps.handoff.outputs.publish_sha }}
+          PUBLISH_SHA: ${{ steps.publish.outputs.publish_sha }}
         run: |
           set -euo pipefail
           test -n "$STANCATTI_API_URL"
