@@ -1,1 +1,25 @@
-{"schemaVersion":"1.0.0","kind":"resource-version","id":"a7f5413c-258d-4cdc-81cc-15c2b07437a3","resourceId":"229e3027-8fb5-4942-b757-b0f6a41eaa26","label":"b36e0829c6d0","ref":{"type":"commit","value":"main","commitSha":"b36e0829c6d0140e93cfef2ca599b1b07d4a7797"},"monitoredPathSha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","upstreamPublishedAt":"2026-08-19T07:29:41.239Z","approvedAt":"2026-08-19T07:29:41.239Z","officialDownloadUrl":"https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/gemini-extension.json","packaging":{"mode":"staged","packagedAt":"2026-08-19T07:29:41.238Z","artifactFileName":null,"artifactSha256":null,"payloadSha256":null,"sizeBytes":null,"githubReleaseTag":null}}
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "a7f5413c-258d-4cdc-81cc-15c2b07437a3",
+  "resourceId": "229e3027-8fb5-4942-b757-b0f6a41eaa26",
+  "label": "b36e0829c6d0",
+  "ref": {
+    "type": "commit",
+    "value": "main",
+    "commitSha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797"
+  },
+  "monitoredPathSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "upstreamPublishedAt": "2026-08-19T07:29:41.239Z",
+  "approvedAt": "2026-08-19T07:29:41.239Z",
+  "officialDownloadUrl": "https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/gemini-extension.json",
+  "packaging": {
+    "mode": "registry-zip",
+    "packagedAt": "2026-08-19T07:29:41.238Z",
+    "artifactFileName": "obra-superpowers-gemini-extension-b36e0829c6d0.zip",
+    "artifactSha256": "fc3d53641887e227181cfb72dd21317485d42f7971ee1ba41873f74f815b91d5",
+    "payloadSha256": "507f526a69b6cb1e059bc2536a2ce100153e1828712e6d33694530dc017cb30b",
+    "sizeBytes": 1566,
+    "githubReleaseTag": "resource/obra-superpowers-gemini-extension/b36e0829c6d0"
+  }
+}

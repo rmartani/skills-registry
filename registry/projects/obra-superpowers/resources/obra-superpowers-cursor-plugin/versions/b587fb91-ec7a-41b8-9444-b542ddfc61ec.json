@@ -1,1 +1,25 @@
-{"schemaVersion":"1.0.0","kind":"resource-version","id":"b587fb91-ec7a-41b8-9444-b542ddfc61ec","resourceId":"73a881e9-9cd2-48ed-ae28-c208932f6ab6","label":"b36e0829c6d0","ref":{"type":"commit","value":"main","commitSha":"b36e0829c6d0140e93cfef2ca599b1b07d4a7797"},"monitoredPathSha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","upstreamPublishedAt":"2026-08-19T07:29:43.492Z","approvedAt":"2026-08-19T07:29:43.492Z","officialDownloadUrl":"https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/.cursor-plugin/plugin.json","packaging":{"mode":"staged","packagedAt":"2026-08-19T07:29:43.492Z","artifactFileName":null,"artifactSha256":null,"payloadSha256":null,"sizeBytes":null,"githubReleaseTag":null}}
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "b587fb91-ec7a-41b8-9444-b542ddfc61ec",
+  "resourceId": "73a881e9-9cd2-48ed-ae28-c208932f6ab6",
+  "label": "b36e0829c6d0",
+  "ref": {
+    "type": "commit",
+    "value": "main",
+    "commitSha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797"
+  },
+  "monitoredPathSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "upstreamPublishedAt": "2026-08-19T07:29:43.492Z",
+  "approvedAt": "2026-08-19T07:29:43.492Z",
+  "officialDownloadUrl": "https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/.cursor-plugin/plugin.json",
+  "packaging": {
+    "mode": "registry-zip",
+    "packagedAt": "2026-08-19T07:29:43.492Z",
+    "artifactFileName": "obra-superpowers-cursor-plugin-b36e0829c6d0.zip",
+    "artifactSha256": "06e721654f46711e7bccc107ee5804af47db644ef909c270181c21c067634627",
+    "payloadSha256": "0ec792633ac9b958b573b6e1a7532264aa94521972c21986e9d5d80402bb1e94",
+    "sizeBytes": 1705,
+    "githubReleaseTag": "resource/obra-superpowers-cursor-plugin/b36e0829c6d0"
+  }
+}

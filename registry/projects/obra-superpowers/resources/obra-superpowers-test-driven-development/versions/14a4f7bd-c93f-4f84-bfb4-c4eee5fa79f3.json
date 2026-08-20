@@ -1,1 +1,25 @@
-{"schemaVersion":"1.0.0","kind":"resource-version","id":"14a4f7bd-c93f-4f84-bfb4-c4eee5fa79f3","resourceId":"04287240-74b6-43e0-a192-fbee8794271f","label":"b36e0829c6d0","ref":{"type":"commit","value":"main","commitSha":"b36e0829c6d0140e93cfef2ca599b1b07d4a7797"},"monitoredPathSha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","upstreamPublishedAt":"2026-08-19T07:29:23.696Z","approvedAt":"2026-08-19T07:29:23.696Z","officialDownloadUrl":"https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/test-driven-development/SKILL.md","packaging":{"mode":"staged","packagedAt":"2026-08-19T07:29:23.696Z","artifactFileName":null,"artifactSha256":null,"payloadSha256":null,"sizeBytes":null,"githubReleaseTag":null}}
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "14a4f7bd-c93f-4f84-bfb4-c4eee5fa79f3",
+  "resourceId": "04287240-74b6-43e0-a192-fbee8794271f",
+  "label": "b36e0829c6d0",
+  "ref": {
+    "type": "commit",
+    "value": "main",
+    "commitSha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797"
+  },
+  "monitoredPathSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "upstreamPublishedAt": "2026-08-19T07:29:23.696Z",
+  "approvedAt": "2026-08-19T07:29:23.696Z",
+  "officialDownloadUrl": "https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/test-driven-development/SKILL.md",
+  "packaging": {
+    "mode": "registry-zip",
+    "packagedAt": "2026-08-19T07:29:23.696Z",
+    "artifactFileName": "obra-superpowers-test-driven-development-b36e0829c6d0.zip",
+    "artifactSha256": "106a3f727e94645b4cffe6d991dc2e92fabad5d08567f29f60b4482ea3ed05d6",
+    "payloadSha256": "41600d5972debc61bcbce61f978fe4b5883bab7daaf238ae4bef5738a61a2833",
+    "sizeBytes": 5376,
+    "githubReleaseTag": "resource/obra-superpowers-test-driven-development/b36e0829c6d0"
+  }
+}
