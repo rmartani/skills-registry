@@ -1,1 +1,25 @@
-{"schemaVersion":"1.0.0","kind":"resource-version","id":"529da525-3399-4cb0-9808-66a8ab39de4f","resourceId":"bfe7650c-0713-4ca7-9795-74dcc5930bb9","label":"b36e0829c6d0","ref":{"type":"commit","value":"main","commitSha":"b36e0829c6d0140e93cfef2ca599b1b07d4a7797"},"monitoredPathSha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","upstreamPublishedAt":"2026-08-19T07:29:28.859Z","approvedAt":"2026-08-19T07:29:28.859Z","officialDownloadUrl":"https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/subagent-driven-development/SKILL.md","packaging":{"mode":"staged","packagedAt":"2026-08-19T07:29:28.859Z","artifactFileName":null,"artifactSha256":null,"payloadSha256":null,"sizeBytes":null,"githubReleaseTag":null}}
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "529da525-3399-4cb0-9808-66a8ab39de4f",
+  "resourceId": "bfe7650c-0713-4ca7-9795-74dcc5930bb9",
+  "label": "b36e0829c6d0",
+  "ref": {
+    "type": "commit",
+    "value": "main",
+    "commitSha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797"
+  },
+  "monitoredPathSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "upstreamPublishedAt": "2026-08-19T07:29:28.859Z",
+  "approvedAt": "2026-08-19T07:29:28.859Z",
+  "officialDownloadUrl": "https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/subagent-driven-development/SKILL.md",
+  "packaging": {
+    "mode": "registry-zip",
+    "packagedAt": "2026-08-19T07:29:28.859Z",
+    "artifactFileName": "obra-superpowers-subagent-driven-development-b36e0829c6d0.zip",
+    "artifactSha256": "d2732fe5efb32341f3ae0ab7cf2a94476bd19ea57b1bfc766fa2d7f0af6cda24",
+    "payloadSha256": "7f7dac9014681010b80e1c05767cbd88435febfa07098f4101478c70a3b3aa15",
+    "sizeBytes": 13060,
+    "githubReleaseTag": "resource/obra-superpowers-subagent-driven-development/b36e0829c6d0"
+  }
+}

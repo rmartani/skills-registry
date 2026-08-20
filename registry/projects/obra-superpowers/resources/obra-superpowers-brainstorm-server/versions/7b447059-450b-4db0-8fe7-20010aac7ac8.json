@@ -1,1 +1,25 @@
-{"schemaVersion":"1.0.0","kind":"resource-version","id":"7b447059-450b-4db0-8fe7-20010aac7ac8","resourceId":"05ab9b7b-6de4-48b6-83ef-e1ee301a7808","label":"b36e0829c6d0","ref":{"type":"commit","value":"main","commitSha":"b36e0829c6d0140e93cfef2ca599b1b07d4a7797"},"monitoredPathSha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","upstreamPublishedAt":"2026-08-19T07:29:08.890Z","approvedAt":"2026-08-19T07:29:08.890Z","officialDownloadUrl":"https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/tests/brainstorm-server/package.json","packaging":{"mode":"staged","packagedAt":"2026-08-19T07:29:08.887Z","artifactFileName":null,"artifactSha256":null,"payloadSha256":null,"sizeBytes":null,"githubReleaseTag":null}}
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "7b447059-450b-4db0-8fe7-20010aac7ac8",
+  "resourceId": "05ab9b7b-6de4-48b6-83ef-e1ee301a7808",
+  "label": "b36e0829c6d0",
+  "ref": {
+    "type": "commit",
+    "value": "main",
+    "commitSha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797"
+  },
+  "monitoredPathSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "upstreamPublishedAt": "2026-08-19T07:29:08.890Z",
+  "approvedAt": "2026-08-19T07:29:08.890Z",
+  "officialDownloadUrl": "https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/tests/brainstorm-server/package.json",
+  "packaging": {
+    "mode": "registry-zip",
+    "packagedAt": "2026-08-19T07:29:08.887Z",
+    "artifactFileName": "obra-superpowers-brainstorm-server-b36e0829c6d0.zip",
+    "artifactSha256": "d56082f3726f3969ef2aeb70bf3d1abb933bbf0bd8c0a92281888c4a35404075",
+    "payloadSha256": "7c0b800988122f443183919350be8da6670c2a6f3d91e79047f35a9d5f8eb979",
+    "sizeBytes": 1594,
+    "githubReleaseTag": "resource/obra-superpowers-brainstorm-server/b36e0829c6d0"
+  }
+}

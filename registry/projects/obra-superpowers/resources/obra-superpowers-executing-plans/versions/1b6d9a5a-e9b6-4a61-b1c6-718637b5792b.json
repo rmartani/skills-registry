@@ -1,1 +1,25 @@
-{"schemaVersion":"1.0.0","kind":"resource-version","id":"1b6d9a5a-e9b6-4a61-b1c6-718637b5792b","resourceId":"e47809af-954b-4099-907c-66a803a28f65","label":"b36e0829c6d0","ref":{"type":"commit","value":"main","commitSha":"b36e0829c6d0140e93cfef2ca599b1b07d4a7797"},"monitoredPathSha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","upstreamPublishedAt":"2026-08-19T07:29:38.572Z","approvedAt":"2026-08-19T07:29:38.572Z","officialDownloadUrl":"https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/executing-plans/SKILL.md","packaging":{"mode":"staged","packagedAt":"2026-08-19T07:29:38.572Z","artifactFileName":null,"artifactSha256":null,"payloadSha256":null,"sizeBytes":null,"githubReleaseTag":null}}
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "1b6d9a5a-e9b6-4a61-b1c6-718637b5792b",
+  "resourceId": "e47809af-954b-4099-907c-66a803a28f65",
+  "label": "b36e0829c6d0",
+  "ref": {
+    "type": "commit",
+    "value": "main",
+    "commitSha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797"
+  },
+  "monitoredPathSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "upstreamPublishedAt": "2026-08-19T07:29:38.572Z",
+  "approvedAt": "2026-08-19T07:29:38.572Z",
+  "officialDownloadUrl": "https://raw.githubusercontent.com/obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/executing-plans/SKILL.md",
+  "packaging": {
+    "mode": "registry-zip",
+    "packagedAt": "2026-08-19T07:29:38.572Z",
+    "artifactFileName": "obra-superpowers-executing-plans-b36e0829c6d0.zip",
+    "artifactSha256": "b9c3f43189fea58b1b698d9170238b256ab7ceb9c10b4e65c3a499d41cb6051d",
+    "payloadSha256": "299464b688cddc3da35bdedbb6f1d5502c5a0b13905829c4c0bbedd06b0732a5",
+    "sizeBytes": 2562,
+    "githubReleaseTag": "resource/obra-superpowers-executing-plans/b36e0829c6d0"
+  }
+}
