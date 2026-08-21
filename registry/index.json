@@ -6,13 +6,13 @@
       "path": "projects/context7/collections/context7-tools.json",
       "kind": "collection",
       "id": "22222222-2222-4222-8222-222222222223",
-      "sha256": "fffba76908fcb4311af6fe7bc7bbf735de219aea115f4e2d8f6628f063537cd1"
+      "sha256": "bed5481777fa7d8ae3544cdfe8d928b06534f21c41deb5f9ba585cf7248719fb"
     },
     {
       "path": "projects/context7/project.json",
       "kind": "project",
       "id": "22222222-2222-4222-8222-222222222222",
-      "sha256": "acd710b317b34977479a8ddc5663d0bb3f35e9b06c956d163a921fef02fdf29a"
+      "sha256": "52ded168274374b517f9470cc43be093f1e84abdef761e978ac4625caa6540f3"
     },
     {
       "path": "projects/context7/resources/context7-cli-skills/resource.json",
@@ -30,13 +30,19 @@
       "path": "projects/context7/resources/context7-mcp/resource.json",
       "kind": "resource",
       "id": "22222222-2222-4222-8222-222222222224",
-      "sha256": "557484c7b036ca9bf17ad40fd78ab6bcad46aeb61150a5b19e24d99939d53b87"
+      "sha256": "37987a2bcb4355963f5e66a0a82980358c4b18809738f6901a15524748c65b2d"
     },
     {
       "path": "projects/context7/resources/context7-mcp/versions/22222222-2222-4222-8222-222222222227.json",
       "kind": "resource-version",
       "id": "22222222-2222-4222-8222-222222222227",
       "sha256": "ff53d91d1aa0845d6234814394e68cb4361cd8eb7900c4f02f2bd5b2db7431b1"
+    },
+    {
+      "path": "projects/context7/resources/context7-mcp/versions/9b21c17e-5e83-46a9-922b-300d9ea7c115.json",
+      "kind": "resource-version",
+      "id": "9b21c17e-5e83-46a9-922b-300d9ea7c115",
+      "sha256": "d2db821027851d1f8bc870e924552f6700cc7f2baa9698e1dd3aef8194c8b934"
     },
     {
       "path": "projects/context7/resources/context7-plugins/resource.json",
