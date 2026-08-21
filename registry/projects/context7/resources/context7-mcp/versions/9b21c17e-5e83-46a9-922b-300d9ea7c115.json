@@ -1,1 +1,25 @@
-{"schemaVersion":"1.0.0","kind":"resource-version","id":"9b21c17e-5e83-46a9-922b-300d9ea7c115","resourceId":"22222222-2222-4222-8222-222222222224","label":"upstash-context7-mcp-4.0.3","ref":{"type":"release","value":"@upstash/context7-mcp@4.0.3","commitSha":"c3248289c2ad431a9f34849a3f3d047fc4400373"},"monitoredPathSha256":"54200a0086a164eef6dce3d5f1b5a761767e2571201d2f5e185ffef2e7a37674","upstreamPublishedAt":"2026-08-21T08:01:35Z","approvedAt":"2026-08-21T23:23:54.825Z","officialDownloadUrl":"https://github.com/upstash/context7/releases/tag/%40upstash/context7-mcp%404.0.3","packaging":{"mode":"staged","packagedAt":"2026-08-21T23:23:54.823Z","artifactFileName":null,"artifactSha256":null,"payloadSha256":null,"sizeBytes":null,"githubReleaseTag":null}}
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "9b21c17e-5e83-46a9-922b-300d9ea7c115",
+  "resourceId": "22222222-2222-4222-8222-222222222224",
+  "label": "upstash-context7-mcp-4.0.3",
+  "ref": {
+    "type": "release",
+    "value": "@upstash/context7-mcp@4.0.3",
+    "commitSha": "c3248289c2ad431a9f34849a3f3d047fc4400373"
+  },
+  "monitoredPathSha256": "54200a0086a164eef6dce3d5f1b5a761767e2571201d2f5e185ffef2e7a37674",
+  "upstreamPublishedAt": "2026-08-21T08:01:35Z",
+  "approvedAt": "2026-08-21T23:23:54.825Z",
+  "officialDownloadUrl": "https://github.com/upstash/context7/releases/tag/%40upstash/context7-mcp%404.0.3",
+  "packaging": {
+    "mode": "registry-zip",
+    "packagedAt": "2026-08-21T23:23:54.823Z",
+    "artifactFileName": "context7-mcp-upstash-context7-mcp-4.0.3.zip",
+    "artifactSha256": "784ea0eda8a8a42a0a2614a022a543541ede6a4404469e39418b06a1a1d6d67d",
+    "payloadSha256": "50fdefaae8a279ba083bd300b3d918eafa43593556f259e30853fa4eb1fafc76",
+    "sizeBytes": 74412,
+    "githubReleaseTag": "resource/context7-mcp/upstash-context7-mcp-4.0.3"
+  }
+}
