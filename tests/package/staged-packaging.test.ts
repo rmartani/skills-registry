@@ -7,7 +7,7 @@ import { test } from "node:test";
 import { writeIndex } from "../../src/index/build-index.js";
 import { prepareStagedPackages } from "../../src/package/live-packaging.js";
 import { readZipArchive } from "../../src/package/archive-reader.js";
-import { validateRepository } from "../../src/schema/validate.js";
+import { collectManifestFiles, validateRepository } from "../../src/schema/validate.js";
 
 const rootDir = path.resolve(process.cwd());
 const versionPath = "registry/projects/context7/resources/context7-mcp/versions/22222222-2222-4222-8222-222222222227.json";
@@ -44,6 +44,14 @@ async function stagedRepository(monitoredPath = "packages/mcp"): Promise<{ tempo
   const resource = JSON.parse((await readFile(resourcePath)).toString()) as Record<string, any>;
   resource.source.monitoredPath = monitoredPath;
   await writeFile(resourcePath, `${JSON.stringify(resource, null, 2)}\n`);
+  const targetRelativePath = path.relative(path.join(temporary, "registry"), absoluteVersionPath).replaceAll(path.sep, "/");
+  for (const file of await collectManifestFiles(temporary)) {
+    if (file.kind !== "resource-version" || file.path === targetRelativePath || file.document.packaging?.mode !== "staged") continue;
+    await writeFile(
+      path.join(temporary, "registry", file.path),
+      `${JSON.stringify({ ...file.document, packaging: { ...file.document.packaging, mode: "link-only" } }, null, 2)}\n`
+    );
+  }
   await writeIndex(temporary);
   return { temporary, versionPath: absoluteVersionPath };
 }
