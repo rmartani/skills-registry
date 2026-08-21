@@ -42,7 +42,7 @@
       "path": "projects/context7/resources/context7-mcp/versions/9b21c17e-5e83-46a9-922b-300d9ea7c115.json",
       "kind": "resource-version",
       "id": "9b21c17e-5e83-46a9-922b-300d9ea7c115",
-      "sha256": "d2db821027851d1f8bc870e924552f6700cc7f2baa9698e1dd3aef8194c8b934"
+      "sha256": "2ca267e5c64bcc5ee74965e50fadf6cbf20ae1aa4088fb020ae2fb3723a69063"
     },
     {
       "path": "projects/context7/resources/context7-plugins/resource.json",
