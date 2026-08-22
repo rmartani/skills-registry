@@ -229,6 +229,7 @@ export async function validateRepository(rootDir: string, options: ValidationOpt
   const resourceBySlug = new Map<string, ManifestFile>();
   const collectionVersionById = new Map<string, ManifestFile>();
   const resourceVersionById = new Map<string, ManifestFile>();
+  const resourceVersionIdentityByRef = new Map<string, string>();
 
   for (const file of files) {
     const existingId = ids.get(file.id);
@@ -313,6 +314,15 @@ export async function validateRepository(rootDir: string, options: ValidationOpt
     const basename = path.posix.basename(file.path, ".json");
     if (basename !== file.id) addIssue(issues, file.path, "nome do arquivo de versão deve ser o id canônico.");
     if (resource) {
+      const ref = isRecord(file.document.ref) ? file.document.ref : undefined;
+      const refType = stringValue(ref?.type);
+      const refValue = stringValue(ref?.value);
+      if (resourceId && refType && refValue) {
+        const identity = JSON.stringify([resourceId, refType, refValue]);
+        const existing = resourceVersionIdentityByRef.get(identity);
+        if (existing) addIssue(issues, file.path, `ref ${refType}:${refValue} duplicado no Resource; já usado em ${existing}`);
+        else resourceVersionIdentityByRef.set(identity, file.path);
+      }
       const official = isRecord(resource.document.official) ? resource.document.official : undefined;
       const license = official && isRecord(official.license) ? official.license : undefined;
       const packaging = isRecord(file.document.packaging) ? file.document.packaging : undefined;
