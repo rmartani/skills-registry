@@ -60,19 +60,19 @@
       "path": "projects/matt-pocock-skills/collections/matt-pocock-skills-collection.json",
       "kind": "collection",
       "id": "11111111-1111-4111-8111-111111111112",
-      "sha256": "f97ec1fbde9255f5f49d86e203916582bb9a702d5d19fd65d5c3b4924eabfda6"
+      "sha256": "74eab0b2c36070340944d22bd87a602f891eebb4650349a11c5e0c9146c17700"
     },
     {
       "path": "projects/matt-pocock-skills/project.json",
       "kind": "project",
       "id": "11111111-1111-4111-8111-111111111111",
-      "sha256": "8f286bbc82331662c0c8842a31898a31e8ede5424da4cd3504eaebb404df21c1"
+      "sha256": "85efafd5618bb57a473ab2e8d30d31a39c69530683586c26e5c0000b6cd8748a"
     },
     {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/resource.json",
       "kind": "resource",
       "id": "11111111-1111-4111-8111-111111111114",
-      "sha256": "a0dad4de880aa46c03c43679c77ac13d425257ed24e111367d06c388ec37a8ba"
+      "sha256": "08abec3c2873d530843d729dc33f2d7b037c3098ded903b13a113c656eb08e92"
     },
     {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/versions/11111111-1111-4111-8111-111111111122.json",
@@ -81,16 +81,28 @@
       "sha256": "5e05e42cda5ea857745d414115b2571a029ea906ed34fefb1683a9e5ffda83f6"
     },
     {
+      "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/versions/54e203ac-9384-4882-baa9-a324d608cdbb.json",
+      "kind": "resource-version",
+      "id": "54e203ac-9384-4882-baa9-a324d608cdbb",
+      "sha256": "7b451f9952943eac7ac83c4c8ed8e2d677636080007e808c494ac37727884e40"
+    },
+    {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills/resource.json",
       "kind": "resource",
       "id": "11111111-1111-4111-8111-111111111113",
-      "sha256": "eec66d1181ff237b73bab53ed17d8b76e420d3b25270960a96038e89edc9b613"
+      "sha256": "d085762a5dd0f7b52b8df0639a2f30494fdabe835341fe23fcb44237ed25cd6f"
     },
     {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills/versions/11111111-1111-4111-8111-111111111121.json",
       "kind": "resource-version",
       "id": "11111111-1111-4111-8111-111111111121",
       "sha256": "9082410c7a51f22f6598dd24e18cbb02babdd1a9cf0d2a7c6da93efe226dc395"
+    },
+    {
+      "path": "projects/matt-pocock-skills/resources/mattpocock-skills/versions/fa366dc0-2327-4a51-b0cf-0280a5a1aef0.json",
+      "kind": "resource-version",
+      "id": "fa366dc0-2327-4a51-b0cf-0280a5a1aef0",
+      "sha256": "cc012d5afa8de9f1ffd4c52cf013063559aa05ec0a3a4da05e0dcc74353ee81a"
     },
     {
       "path": "projects/obra-superpowers/collections/superpowers-resources.json",
