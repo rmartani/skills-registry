@@ -39,7 +39,7 @@ Detecção não muda `recommendedVersionId`. Aprovação cria uma PR; somente me
 { "schemaVersion": "1.0.0", "kind": "registry-index", "entries": [] }
 ```
 
-`npm run validate` também compara o índice com a árvore atual e falha para IDs/paths/referências órfãos, slug duplicado, recommended ID de outro Resource ou redirect inválido.
+`npm run validate` também compara o índice com a árvore atual e falha para IDs/paths/referências órfãos, refs duplicados no mesmo Resource, slug duplicado, recommended ID de outro Resource ou redirect inválido.
 
 ## Versionamento e detecção
 

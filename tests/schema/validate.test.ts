@@ -78,6 +78,22 @@ test("staged versions are accepted only for the explicit publication handoff", a
   }
 });
 
+test("duplicate resource version refs fail repository validation", async () => {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), "skills-registry-duplicate-version-ref-"));
+  try {
+    await cp(rootDir, temporary, { recursive: true, filter: (source) => !source.includes(`${path.sep}node_modules${path.sep}`) && !source.includes(`${path.sep}.git${path.sep}`) && !source.endsWith(`${path.sep}dist`) });
+    const sourcePath = path.join(temporary, "registry/projects/context7/resources/context7-mcp/versions/22222222-2222-4222-8222-222222222227.json");
+    const duplicatePath = path.join(temporary, "registry/projects/context7/resources/context7-mcp/versions/22222222-2222-4222-8222-222222222230.json");
+    const duplicate = JSON.parse((await readFile(sourcePath)).toString("utf8")) as Record<string, unknown>;
+    duplicate.id = "22222222-2222-4222-8222-222222222230";
+    await writeFile(duplicatePath, `${JSON.stringify(duplicate, null, 2)}\n`);
+    await writeIndex(temporary);
+    await assert.rejects(() => validateRepository(temporary), /duplicado no Resource/);
+  } finally {
+    await rm(temporary, { recursive: true, force: true });
+  }
+});
+
 test("link-only licenses cannot publish registry ZIPs", async () => {
   const temporary = await mkdtemp(path.join(os.tmpdir(), "skills-registry-license-"));
   try {
