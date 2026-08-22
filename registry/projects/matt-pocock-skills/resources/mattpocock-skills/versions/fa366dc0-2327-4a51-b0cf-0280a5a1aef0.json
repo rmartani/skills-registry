@@ -1,1 +1,25 @@
-{"schemaVersion":"1.0.0","kind":"resource-version","id":"fa366dc0-2327-4a51-b0cf-0280a5a1aef0","resourceId":"11111111-1111-4111-8111-111111111113","label":"v1.2.3","ref":{"type":"release","value":"v1.2.3","commitSha":"5b15a47f2d7150f545fbcacbfe381787fc0230dc"},"monitoredPathSha256":"2eabe6187af2b243856c93e846eb0ba5aef7ff7e7de9ffac5516681da31675d6","upstreamPublishedAt":"2026-08-06T14:05:28Z","approvedAt":"2026-08-22T02:20:54.038Z","officialDownloadUrl":"https://github.com/mattpocock/skills/releases/tag/v1.2.3","packaging":{"mode":"staged","packagedAt":"2026-08-22T02:20:54.037Z","artifactFileName":null,"artifactSha256":null,"payloadSha256":null,"sizeBytes":null,"githubReleaseTag":null}}
+{
+  "schemaVersion": "1.0.0",
+  "kind": "resource-version",
+  "id": "fa366dc0-2327-4a51-b0cf-0280a5a1aef0",
+  "resourceId": "11111111-1111-4111-8111-111111111113",
+  "label": "v1.2.3",
+  "ref": {
+    "type": "release",
+    "value": "v1.2.3",
+    "commitSha": "5b15a47f2d7150f545fbcacbfe381787fc0230dc"
+  },
+  "monitoredPathSha256": "2eabe6187af2b243856c93e846eb0ba5aef7ff7e7de9ffac5516681da31675d6",
+  "upstreamPublishedAt": "2026-08-06T14:05:28Z",
+  "approvedAt": "2026-08-22T02:20:54.038Z",
+  "officialDownloadUrl": "https://github.com/mattpocock/skills/releases/tag/v1.2.3",
+  "packaging": {
+    "mode": "registry-zip",
+    "packagedAt": "2026-08-22T02:20:54.037Z",
+    "artifactFileName": "mattpocock-skills-v1.2.3.zip",
+    "artifactSha256": "7d359448bbcb43266564cf305066e7b0cb63ab8c03ccaa7c1befe567fce33e0f",
+    "payloadSha256": "a844b21cd9c3238ba43444894bdb1a47a175d83cf0c95b9b4564be46117664cc",
+    "sizeBytes": 109808,
+    "githubReleaseTag": "resource/mattpocock-skills/v1.2.3"
+  }
+}
