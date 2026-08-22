@@ -84,7 +84,7 @@
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/versions/54e203ac-9384-4882-baa9-a324d608cdbb.json",
       "kind": "resource-version",
       "id": "54e203ac-9384-4882-baa9-a324d608cdbb",
-      "sha256": "7b451f9952943eac7ac83c4c8ed8e2d677636080007e808c494ac37727884e40"
+      "sha256": "8b9bc176eb3e8892c39b2a7782a3d41f926184bec29cb11f0baad16b196fe521"
     },
     {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills/resource.json",
@@ -102,7 +102,7 @@
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills/versions/fa366dc0-2327-4a51-b0cf-0280a5a1aef0.json",
       "kind": "resource-version",
       "id": "fa366dc0-2327-4a51-b0cf-0280a5a1aef0",
-      "sha256": "cc012d5afa8de9f1ffd4c52cf013063559aa05ec0a3a4da05e0dcc74353ee81a"
+      "sha256": "c8a6ea12c2f444a52ce941ea2e32049b409e48bce95676a37d208a06cc3e6a16"
     },
     {
       "path": "projects/obra-superpowers/collections/superpowers-resources.json",
