@@ -66,13 +66,13 @@
       "path": "projects/matt-pocock-skills/project.json",
       "kind": "project",
       "id": "11111111-1111-4111-8111-111111111111",
-      "sha256": "85efafd5618bb57a473ab2e8d30d31a39c69530683586c26e5c0000b6cd8748a"
+      "sha256": "afa563f88ef1b609b51b0b2a09986433d3843d32c000393a544ee52f8ae2b22c"
     },
     {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/resource.json",
       "kind": "resource",
       "id": "11111111-1111-4111-8111-111111111114",
-      "sha256": "9cab592c48c8eceafcc7ae246ee04bbfa22e0cd3b16aaf3e5f6651f2614578a8"
+      "sha256": "6560ed848963c9c688c4dd30427d76c498762e6b103937e18a3107bcd87b5179"
     },
     {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/versions/11111111-1111-4111-8111-111111111122.json",
@@ -81,16 +81,28 @@
       "sha256": "5e05e42cda5ea857745d414115b2571a029ea906ed34fefb1683a9e5ffda83f6"
     },
     {
+      "path": "projects/matt-pocock-skills/resources/mattpocock-skills-plugin/versions/604390f4-95fe-468b-956b-7cf2bfed951b.json",
+      "kind": "resource-version",
+      "id": "604390f4-95fe-468b-956b-7cf2bfed951b",
+      "sha256": "bfc1d4dce48c1cdaa23a7a575bf15ef7386b75a2c37af8b94e0bc30e5c1f0424"
+    },
+    {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills/resource.json",
       "kind": "resource",
       "id": "11111111-1111-4111-8111-111111111113",
-      "sha256": "00f0ce8b7ebd3a9ec73e82c137f1101c068aae58a2e573963fae29ba41c38b5b"
+      "sha256": "4515346341678281eb44eb293e1094bb7c2898a5293d386d75b6ec972418d8de"
     },
     {
       "path": "projects/matt-pocock-skills/resources/mattpocock-skills/versions/11111111-1111-4111-8111-111111111121.json",
       "kind": "resource-version",
       "id": "11111111-1111-4111-8111-111111111121",
       "sha256": "9082410c7a51f22f6598dd24e18cbb02babdd1a9cf0d2a7c6da93efe226dc395"
+    },
+    {
+      "path": "projects/matt-pocock-skills/resources/mattpocock-skills/versions/231e3b05-bda9-4215-a6e5-3f0b88ab619c.json",
+      "kind": "resource-version",
+      "id": "231e3b05-bda9-4215-a6e5-3f0b88ab619c",
+      "sha256": "7efae78bd296e68261212ef4d846c2b2bba871c28900c440b10ce22c5d425907"
     },
     {
       "path": "projects/obra-superpowers/collections/superpowers-resources.json",
